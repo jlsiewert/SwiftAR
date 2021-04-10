@@ -12,7 +12,7 @@ public struct Cube: Model {
     let height: Float
     let length: Float
     
-    public init(_ width: Float = 0.1, height: Float = 0.1, length: Float = 0.1) {
+    public init(width: Float = 0.1, height: Float = 0.1, length: Float = 0.1) {
         self.width = width
         self.height = height
         self.length = length

@@ -7,6 +7,9 @@
 
 import Foundation
 import SceneKit
+#if canImport(PlaygroundSupport)
+import PlaygroundSupport
+#endif
 
 public class SCNRenderedViewController<E: Experience>: UIViewController {
     let scnView = SCNView()
@@ -26,6 +29,9 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        #if canImport(PlaygroundSupport)
+        view.frame = self.liveViewSafeAreaGuide
+        #endif
         scnView.frame = view.frame
         scnView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(scnView)
@@ -39,3 +45,7 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         renderer = SCNNodeRenderer(scene: scene, experience: experience)
     }
 }
+
+#if canImport(PlaygroundSupport)
+extension SCNRenderedViewController: PlaygroundLiveViewSafeAreaContainer { }
+#endif

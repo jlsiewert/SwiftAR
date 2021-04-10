@@ -69,7 +69,14 @@ class StackReconciler<R: Renderer, E: Experience> {
                 guard let parent = parent else {
                     fatalError("Call to render before parent was mounted!")
                 }
+                
                 result = renderer.mount(element, to: parent)
+                
+                if let modified = element.model as? ModifiedModelContentDeferredToRenderer {
+                    modified.applyToModifier {
+                        renderer.apply($0, to: result)
+                    }
+                }
         }
       
         return result

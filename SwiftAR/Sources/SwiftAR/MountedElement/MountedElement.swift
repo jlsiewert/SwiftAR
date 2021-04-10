@@ -7,12 +7,6 @@
 
 import Foundation
 
-protocol ChildrenProvidingMountedElement {
-    associatedtype R: Renderer
-    associatedtype E: Experience
-    func getChildren() -> [AnyMountedElement<R, E>]
-}
-
 class MountedElement<R: Renderer, E: Experience, M: Model> {
     /// Element is the type elements get rendered into
     typealias Element = R.TargetType
@@ -41,6 +35,11 @@ class MountedElement<R: Renderer, E: Experience, M: Model> {
         self.mounted = .experience(experience)
     }
     
+    public var model: M? {
+        guard case .model(let model) = mounted else { return nil }
+        return model
+    }
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(element)
     }
@@ -56,7 +55,8 @@ class MountedElement<R: Renderer, E: Experience, M: Model> {
         }
         
         element = reconciler.render(self, to: parent)
-
+    
+        
         children?.forEach {
             $0.mount(with: reconciler, parent: element)
         }
@@ -67,12 +67,28 @@ class MountedElement<R: Renderer, E: Experience, M: Model> {
         self.children = [AnyMountedElement(element: element)]
     }
     
-    func createChild(for model: M) {
-        guard M.Body.self != Never.self else {
-            return
+    @_disfavoredOverload
+    func createChild<M: Model>(for model: M) {
+        let parent = AnyMountedElement(element: self)
+        
+        if M.Body.self == Never.self {
+            if let model = model as? ModifiedModelContentDeferredToRenderer {
+                self.children = [ model.createMountedElement(for: parent) ]
+                return
+            } else {
+                print("Skipping child for \(type(of: model))")
+                return
+            }
         }
-        let child = MountedElement<R, E, M.Body>(model: model.body, parent: AnyMountedElement(element: self))
+        print("Mounting children for \(type(of: model))")
+        let child = MountedElement<R, E, M.Body>(model: model.body, parent: parent)
+        self.children = [AnyMountedElement(element: child)]
+    }
+    
+    func createChild<Modifier: ModelModifier, Content: Model>(for model: ModifiedContent<Modifier, Content>) {
+        print("Creating child for ModelModifier \(model)")
+        let applied = model.applied
+        let child = MountedElement<R, E, Content.Body>(model: applied, parent: AnyMountedElement(element: self))
         self.children = [AnyMountedElement(element: child)]
     }
 }
-

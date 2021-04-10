@@ -12,4 +12,5 @@ protocol Renderer: AnyObject {
     
     func mount<E: Experience, M: Model>(_ element: MountedElement<Self, E, M>, to parent: TargetType) -> TargetType
     func renderRoot<E: Experience>(_ experience: E) -> TargetType
+    func apply(_ modifier: Any, to target: TargetType)
 }
