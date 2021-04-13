@@ -10,7 +10,6 @@ import Foundation
 protocol Renderer: AnyObject {
     associatedtype TargetType: Hashable & AnyObject
     
-    func mount<E: Experience, M: Model>(_ element: MountedElement<Self, E, M>, to parent: TargetType) -> TargetType
-    func renderRoot<E: Experience>(_ experience: E) -> TargetType
+    func mount(_ element: MountedElement<Self>, to parent: TargetType?) -> TargetType
     func apply(_ modifier: Any, to target: TargetType)
 }

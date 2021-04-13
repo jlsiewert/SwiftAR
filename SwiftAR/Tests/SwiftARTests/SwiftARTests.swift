@@ -2,14 +2,19 @@ import XCTest
 @testable import SwiftAR
 
 final class SwiftARTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(SwiftAR().text, "Hello, World!")
+    func testSimpleCube() {
+        struct PlaygroundExperience: Experience {
+            var body: some Anchor {
+                Surface {
+                    Cube()
+                }
+            }
+        }
+        
+        let experience = PlaygroundExperience()
+        let vc = SCNRenderedViewController(experience: experience)
+        vc.viewWillAppear(true)
+        let e = expectation(description: "wait for nothing")
+        wait(for: [e], timeout: 60*60)
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }

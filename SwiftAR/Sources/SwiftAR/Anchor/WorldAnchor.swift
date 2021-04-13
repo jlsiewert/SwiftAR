@@ -1,5 +1,5 @@
 //
-//  TransformAnchor.swift
+//  WorldAnchor.swift
 //  SwiftAR
 //
 //  Created by Jan Luca Siewert on 02.04.21.
@@ -8,7 +8,7 @@
 import Foundation
 import simd
 
-public struct Transform<M: Model>: Anchor {
+public struct World<M: Model>: Anchor {
     
     let transform: simd_float4x4
     let model: () -> M

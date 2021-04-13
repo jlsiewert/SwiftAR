@@ -8,33 +8,55 @@
 import Foundation
 import SceneKit
 
-public final class SCNNodeRenderer<E: Experience>: Renderer {
+public final class SCNNodeRenderer: Renderer {
     typealias TargetType = SCNNode
-    let scene: SCNScene
-    var reconciler: StackReconciler<SCNNodeRenderer, E>!
     
-    public init(scene: SCNScene, experience: E) {
+    let scene: SCNScene
+    var reconciler: StackReconciler<SCNNodeRenderer>!
+    
+    public init<E: Experience>(scene: SCNScene, experience: E) {
         self.scene = scene
         self.reconciler = StackReconciler(experience: experience, renderer: self)
         scene.background.contents = UIColor.lightGray
     }
     
-    func mount<E, M>(_ element: MountedElement<SCNNodeRenderer, E, M>, to parent: SCNNode) -> SCNNode where E : Experience, M : Model {
-        print("Mount \(element)")
-        if let element = element as? NodeReflectable {
-            print("Mount primitive \(element)")
-            let node = element.create()
-            parent.addChildNode(node)
-            return node
+    func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: SCNNode?) -> SCNNode {
+        print("Mount \(element._type)")
+        switch element.mounted {
+            case .experience:
+                return scene.rootNode
+            case .anchor(let anchor):
+                guard let parent = parent else {
+                    fatalError("Attempting to mount anchor without parent")
+                }
+                guard let n = anchor.anchor as? NodeReflectable else {
+                    let n = createEmpty(for: parent)
+                    n.name = String(describing: element._type)
+                    return n
+                }
+                let node = n.create()
+                node.name = String(describing: element._type)
+                parent.addChildNode(node)
+                return node
+            case .model(let model):
+                guard let parent = parent else {
+                    fatalError("Attempting to mount anchor without parent")
+                }
+                if let n = model.model as? NodeReflectable {
+                    let node = n.create()
+                    node.name = String(describing: element._type)
+                    parent.addChildNode(node)
+                    return node
+                } else if let modifier = model.model as? NodeReflectableModifier {
+                    parent.name = "\(parent.name ?? "")_\(String(describing: element._type))"
+                    modifier.apply(to: parent)
+                    return parent
+                } else {
+                    let n = createEmpty(for: parent)
+                    n.name = String(describing: element._type)
+                    return n
+                }
         }
-        let node = SCNNode()
-        parent.addChildNode(node)
-        return node
-    }
-    
-    func renderRoot<E: Experience>(_ experience: E) -> SCNNode {
-        // Todo: Create AR Experience
-        return scene.rootNode
     }
     
     func apply(_ modifier: Any, to target: SCNNode) {
@@ -43,5 +65,12 @@ public final class SCNNodeRenderer<E: Experience>: Renderer {
         }
         print("Applying primitive modifier \(modifier) to \(target)")
         modifier.apply(to: target)
+    }
+    
+    func createEmpty(for parent: SCNNode) -> SCNNode {
+        print("Creating empty node")
+        let n = SCNNode()
+        parent.addChildNode(n)
+        return n
     }
 }

@@ -9,13 +9,13 @@ import Foundation
 
 public struct Surface<M: Model>: Anchor {
     public enum SurfaceType {
-        case horizontal, vertical, mesh, anyPlane, all
+        case horizontal, vertical, any
     }
     
     let model: () -> M
     let surfaceType: SurfaceType
     
-    public init(_ surfaceType: SurfaceType = .all, @ModelBuilder _ modelBuilder: @escaping () -> M) {
+    public init(_ surfaceType: SurfaceType = .any, @ModelBuilder _ modelBuilder: @escaping () -> M) {
         self.model = modelBuilder
         self.surfaceType = surfaceType
     }

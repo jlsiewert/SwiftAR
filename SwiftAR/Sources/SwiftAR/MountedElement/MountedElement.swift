@@ -7,37 +7,87 @@
 
 import Foundation
 
-class MountedElement<R: Renderer, E: Experience, M: Model> {
+class MountedElement<R: Renderer> {
+    // MARK: - Initialization
     /// Element is the type elements get rendered into
     typealias Element = R.TargetType
-    /// Each mounted element has an array of `[TypeErased]` elements.
-    /// They are type-earsed to store them in an array.
-    /// Children always wrapp `Model` elements, never `Experience`
-    typealias TypeErased = AnyMountedElement<R, E>
-    
+    typealias Mounted = MountedElement<R>
+
     enum ElementType {
-        case experience(E)
-        case model(M)
+        case experience(AnyExperience)
+        case anchor(AnyAnchor)
+        case model(AnyModel)
     }
     
-    let mounted: ElementType
+    var mounted: ElementType
+    
+    var experience: AnyExperience {
+        get {
+            guard case .experience(let e) = mounted else {
+                fatalError("Can't get experience from \(mounted)")
+            }
+            return e
+        }
+        set {
+            mounted = .experience(newValue)
+        }
+    }
+    
+    var model: AnyModel {
+        get {
+            guard case .model(let m) = mounted else {
+                fatalError("Can't get model from \(mounted)")
+            }
+            return m
+        }
+        set {
+            mounted = .model(newValue)
+        }
+    }
+    
+    var anchor: AnyAnchor {
+        get {
+            guard case .anchor(let a) = mounted else {
+                fatalError("Can't get anchor from \(mounted)")
+            }
+            return a
+        }
+        set {
+            mounted = .anchor(newValue)
+        }
+    }
+    
+    var _type: Any.Type {
+        switch mounted {
+            case .anchor(let a): return a.type
+            case .experience(let e): return e.type
+            case .model(let m): return m.type
+        }
+    }
+    
     var element: Element?
     
-    weak var parent: TypeErased?
-    var children: [TypeErased]?
+    weak var parent: Mounted?
+    var children: [Mounted]?
 
-    init(model: M, parent: TypeErased) {
-        self.mounted = .model(model)
+    init<M: Model>(model: M, parent: Mounted, environment: EnvironmentValues? = nil) {
+        print("Creating mounted element from \(model)")
+        self.mounted = .model(AnyModel(erasing: model))
         self.parent = parent
+        self.environmentValues = environment ?? parent.environmentValues
     }
     
-    init(experience: E) {
-        self.mounted = .experience(experience)
+    init<A: Anchor>(anchor: A, parent: Mounted, environment: EnvironmentValues? = nil) {
+        print("Creating mounted element from \(anchor)")
+        self.mounted = .anchor(AnyAnchor(erasing: anchor))
+        self.parent = parent
+        self.environmentValues = environment ?? parent.environmentValues
     }
     
-    public var model: M? {
-        guard case .model(let model) = mounted else { return nil }
-        return model
+    init<E: Experience>(experience: E, environment: EnvironmentValues = EnvironmentValues()) {
+        print("Creating mounted element from \(experience)")
+        self.mounted = .experience(AnyExperience(erasing: experience))
+        self.environmentValues = environment
     }
     
     func hash(into hasher: inout Hasher) {
@@ -48,47 +98,142 @@ class MountedElement<R: Renderer, E: Experience, M: Model> {
         return lhs.element == rhs.element
     }
     
-    func mount(with reconciler: StackReconciler<R, E>, to parent: R.TargetType? = nil) {
+    // MARK: - Mounting
+    
+    func mount(with reconciler: StackReconciler<R>, to parent: R.TargetType? = nil) {
         switch mounted {
-            case .experience(let e): createChild(for: e)
-            case .model(let m): createChild(for: m)
+            case .experience(let e): children = createChild(for: e)
+            case .model(let m): children = createChild(for: m)
+            case .anchor(let a): children = createChild(for: a)
         }
-        
-        element = reconciler.render(self, to: parent)
+        // Todo: Inject state and environment!
+        prepareForRender()
+        element = reconciler.mount(self, to: parent)
     
-        
         children?.forEach {
-            $0.mount(with: reconciler, parent: element)
+            $0.mount(with: reconciler, to: element)
         }
     }
     
-    func createChild(for experience: E) {
-        let element = MountedElement<R, E, E.Body.Body>(model: experience.body.body, parent: AnyMountedElement(element: self))
-        self.children = [AnyMountedElement(element: element)]
+    func createChild(for experience: AnyExperience) -> [MountedElement] {
+        print("Creating child for \(String(describing: experience)) of type \(String(describing: type(of: experience.bodyType.self)))")
+        let element = MountedElement(anchor: experience.body, parent: self)
+        return [element]
     }
     
-    @_disfavoredOverload
-    func createChild<M: Model>(for model: M) {
-        let parent = AnyMountedElement(element: self)
-        
-        if M.Body.self == Never.self {
-            if let model = model as? ModifiedModelContentDeferredToRenderer {
-                self.children = [ model.createMountedElement(for: parent) ]
-                return
+    func createChild(for anchor: AnyAnchor) -> [MountedElement] {
+        print("Creating child for \(String(describing: anchor)) of type \(String(describing: type(of: anchor.bodyType.self)))")
+        let element = MountedElement(model: anchor.body, parent: self)
+        return [element]
+    }
+    
+    func createChild(for model: AnyModel) -> [MountedElement] {
+        print("Creating child for \(String(describing: model.type))")
+        guard model.bodyType != Never.Type.self else {
+            if let m = model.model as? ModifiedModelContentDeferredToRenderer {
+                print("Creating Child for Modified Content \(model.type)")
+                return [ m.createMountedElement(for: self) ]
             } else {
-                print("Skipping child for \(type(of: model))")
-                return
+                print("Skipping child for \(model.type)")
+                return []
             }
         }
-        print("Mounting children for \(type(of: model))")
-        let child = MountedElement<R, E, M.Body>(model: model.body, parent: parent)
-        self.children = [AnyMountedElement(element: child)]
+        print("Mounting children for \(model.type)")
+        let child = MountedElement<R>(model: model.body, parent: self)
+        return [child]
     }
     
-    func createChild<Modifier: ModelModifier, Content: Model>(for model: ModifiedContent<Modifier, Content>) {
-        print("Creating child for ModelModifier \(model)")
-        let applied = model.applied
-        let child = MountedElement<R, E, Content.Body>(model: applied, parent: AnyMountedElement(element: self))
-        self.children = [AnyMountedElement(element: child)]
+    func update(with reconciler: StackReconciler<R>) {
+        prepareForRender()
+        // Todo: Check children
+        // If same type: call update
+        // if different type: unmount old, mount new
+    }
+    
+    // MARK: Storage
+    /// A type erased storage for `@State` values
+    var store: [Any] = []
+    var environmentValues: EnvironmentValues
+
+    func updateEnvironment() {
+        switch mounted {
+            case .experience(let e):
+                environmentValues.inject(into: &experience.experience, e.type)
+            case .model(let m):
+                environmentValues.inject(into: &model.model, m.type)
+            case .anchor(let a):
+                environmentValues.inject(into: &anchor.anchor, a.type)
+        }
+    }
+    
+    func injectState() {
+        
+    }
+    
+    func prepareForRender() {
+        updateEnvironment()
+        injectState()
+    }
+}
+
+extension EnvironmentValues {
+    mutating func inject(into element: inout Any, _ type: Any.Type) {
+        guard let info = TypeInfo.typeInfo(of: type) else { return }
+        
+        // Extract the view from the AnyView for modification, apply Environment changes:
+        if let container = element as? ModifierContainer {
+            container.environmentModifier?.modifyEnvironment(&self)
+        }
+        
+        // Inject @Environment values
+        // swiftlint:disable force_cast
+        // `DynamicProperty`s can have `@Environment` properties contained in them,
+        // so we have to inject into them as well.
+        for dynamicProp in info.properties.filter({ $0.type is DynamicProperty.Type }) {
+            guard let propInfo = TypeInfo.typeInfo(of: dynamicProp.type) else { return }
+            var propWrapper = dynamicProp.get(from: element) as! DynamicProperty
+            for prop in propInfo.properties.filter({ $0.type is EnvironmentReader.Type }) {
+                var wrapper = prop.get(from: propWrapper) as! EnvironmentReader
+                wrapper.setContent(from: self)
+                prop.set(value: wrapper, on: &propWrapper)
+            }
+            dynamicProp.set(value: propWrapper, on: &element)
+        }
+        for prop in info.properties.filter({ $0.type is EnvironmentReader.Type }) {
+            var wrapper = prop.get(from: element) as! EnvironmentReader
+            wrapper.setContent(from: self)
+            prop.set(value: wrapper, on: &element)
+        }
+        // swiftlint:enable force_cast
+    }
+}
+
+extension TypeInfo {
+    /// Extract all `DynamicProperty` from a type, recursively.
+    /// This is necessary as a `DynamicProperty` can be nested.
+    /// `EnvironmentValues` can also be injected at this point.
+    func dynamicProperties(
+        _ environment: inout EnvironmentValues,
+        source: inout Any
+    ) -> [PropertyInfo] {
+        var dynamicProps = [PropertyInfo]()
+        for prop in properties where prop.type is DynamicProperty.Type {
+            dynamicProps.append(prop)
+            guard let propInfo = TypeInfo.typeInfo(of: prop.type) else { continue }
+            
+            environment.inject(into: &source, prop.type)
+            var extracted = prop.get(from: source)
+            dynamicProps.append(
+                contentsOf: propInfo.dynamicProperties(
+                    &environment,
+                    source: &extracted
+                )
+            )
+            // swiftlint:disable:next force_cast
+            var extractedDynamicProp = extracted as! DynamicProperty
+            extractedDynamicProp.update()
+            prop.set(value: extractedDynamicProp, on: &source)
+        }
+        return dynamicProps
     }
 }

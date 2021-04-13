@@ -10,7 +10,8 @@ import SceneKit
 
 extension TransformModifier: NodeReflectableModifier {
     func apply(to node: SCNNode) {
-        node.simdTransform = transform
+        let m = SCNMatrix4(transform)
+        node.transform = m
     }
     
     

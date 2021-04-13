@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol ModifierContainer {
+    var environmentModifier: EnvironmentModifier? { get }
+}
+
 public struct ModifiedContent<Content: Model, Modifier: ModelModifier>: Model {
     
     public init(content: Content, modifier: Modifier) {
@@ -27,12 +31,15 @@ public struct ModifiedContent<Content: Model, Modifier: ModelModifier>: Model {
 }
 
 extension ModifiedContent: ModifiedModelContentDeferredToRenderer where Modifier: PrimitiveModifier {
-    func createMountedElement<R, E>(for parent: AnyMountedElement<R, E>) -> AnyMountedElement<R, E> where R : Renderer, E : Experience {
-        let element = MountedElement(model: content, parent: parent)
-        return AnyMountedElement(element: element)
+    func createMountedElement<R>(for parent: MountedElement<R>) -> MountedElement<R> where R : Renderer {
+        MountedElement(model: content, parent: parent)
     }
     
     func applyToModifier(closure: (Any) -> ()) {
         closure(modifier as Any)
     }
+}
+
+extension ModifiedContent: ModifierContainer {
+    var environmentModifier: EnvironmentModifier? { modifier as? EnvironmentModifier }
 }

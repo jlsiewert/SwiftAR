@@ -47,6 +47,6 @@ public extension Model {
 }
 
 protocol ModifiedModelContentDeferredToRenderer {
-    func createMountedElement<R: Renderer, E: Experience>(for parent: AnyMountedElement<R,E>) -> AnyMountedElement<R, E>
+    func createMountedElement<R: Renderer>(for parent: MountedElement<R>) -> MountedElement<R>
     func applyToModifier(closure: (Any) -> ())
 }

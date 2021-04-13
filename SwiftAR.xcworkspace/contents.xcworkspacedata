@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:SwiftARTest/SwiftARTest.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:SwiftAR">
    </FileRef>
    <FileRef

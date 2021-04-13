@@ -14,7 +14,7 @@ import PlaygroundSupport
 public class SCNRenderedViewController<E: Experience>: UIViewController {
     let scnView = SCNView()
     
-    var renderer: SCNNodeRenderer<E>!
+    var renderer: SCNNodeRenderer!
     
     let experience: E
     
@@ -31,6 +31,8 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         super.viewDidLoad()
         #if canImport(PlaygroundSupport)
         view.frame = self.liveViewSafeAreaGuide
+        #else
+        scnView.showsStatistics = true
         #endif
         scnView.frame = view.frame
         scnView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

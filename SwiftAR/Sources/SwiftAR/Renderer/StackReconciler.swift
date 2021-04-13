@@ -25,14 +25,14 @@
 
 import Foundation
 
-class StackReconciler<R: Renderer, E: Experience> {
+class StackReconciler<R: Renderer> {
     typealias Callback = () -> ()
     private let scheduler: (@escaping Callback) -> ()
     private(set) weak var renderer: R!
     
-    private var base: MountedElement<R, E, E.Body.Body>!
+    private var base: MountedElement<R>!
     
-    init(
+    init<E: Experience>(
         experience: E,
         renderer: R,
         scheduler: @escaping (@escaping Callback) -> () = { closure in DispatchQueue.main.async { closure() } }
@@ -52,19 +52,19 @@ class StackReconciler<R: Renderer, E: Experience> {
         
     }
     
-    func reconcile(_ element: AnyMountedElement<R, E>) {
+    func reconcile(_ element: MountedElement<R>) {
         
     }
     
-    func queueUpdate<M: Model>(for element: MountedElement<R, E, M>) {
+    func queueUpdate(for element: MountedElement<R>) {
         
     }
     
-    func render<M: Model>(_ element: MountedElement<R, E, M>, to parent: R.TargetType? = nil) -> R.TargetType {
+    func mount(_ element: MountedElement<R>, to parent: R.TargetType? = nil) -> R.TargetType {
         let result: R.TargetType
         switch element.mounted {
-            case .experience(let e):
-                result = renderer.renderRoot(e)
+            case .experience:
+                result = renderer.mount(element, to: nil)
             case .model:
                 guard let parent = parent else {
                     fatalError("Call to render before parent was mounted!")
@@ -72,11 +72,17 @@ class StackReconciler<R: Renderer, E: Experience> {
                 
                 result = renderer.mount(element, to: parent)
                 
-                if let modified = element.model as? ModifiedModelContentDeferredToRenderer {
+                if let modified = element.model.model as? ModifiedModelContentDeferredToRenderer {
                     modified.applyToModifier {
                         renderer.apply($0, to: result)
                     }
                 }
+            case .anchor:
+                guard let parent = parent else {
+                    fatalError("Call to render before parent was mounted!")
+                }
+                
+                result = renderer.mount(element, to: parent)
         }
       
         return result
