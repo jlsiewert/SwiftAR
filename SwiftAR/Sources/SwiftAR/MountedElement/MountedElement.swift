@@ -71,21 +71,18 @@ class MountedElement<R: Renderer> {
     var children: [Mounted]?
 
     init<M: Model>(model: M, parent: Mounted, environment: EnvironmentValues? = nil) {
-        print("Creating mounted element from \(model)")
         self.mounted = .model(AnyModel(erasing: model))
         self.parent = parent
         self.environmentValues = environment ?? parent.environmentValues
     }
     
     init<A: Anchor>(anchor: A, parent: Mounted, environment: EnvironmentValues? = nil) {
-        print("Creating mounted element from \(anchor)")
         self.mounted = .anchor(AnyAnchor(erasing: anchor))
         self.parent = parent
         self.environmentValues = environment ?? parent.environmentValues
     }
     
     init<E: Experience>(experience: E, environment: EnvironmentValues = EnvironmentValues()) {
-        print("Creating mounted element from \(experience)")
         self.mounted = .experience(AnyExperience(erasing: experience))
         self.environmentValues = environment
     }
@@ -101,13 +98,17 @@ class MountedElement<R: Renderer> {
     // MARK: - Mounting
     
     func mount(with reconciler: StackReconciler<R>, to parent: R.TargetType? = nil) {
+        updateEnvironment()
         switch mounted {
-            case .experience(let e): children = createChild(for: e)
-            case .model(let m): children = createChild(for: m)
-            case .anchor(let a): children = createChild(for: a)
+            case .experience(let e):
+                children = createChild(for: e, reconciler: reconciler)
+            case .model(let m):
+                children = createChild(for: m, reconciler: reconciler)
+            case .anchor(let a):
+                children = createChild(for: a, reconciler: reconciler)
         }
         // Todo: Inject state and environment!
-        prepareForRender()
+        
         element = reconciler.mount(self, to: parent)
     
         children?.forEach {
@@ -115,19 +116,21 @@ class MountedElement<R: Renderer> {
         }
     }
     
-    func createChild(for experience: AnyExperience) -> [MountedElement] {
-        print("Creating child for \(String(describing: experience)) of type \(String(describing: type(of: experience.bodyType.self)))")
-        let element = MountedElement(anchor: experience.body, parent: self)
+    func createChild(for experience: AnyExperience, reconciler: StackReconciler<R>) -> [MountedElement] {
+        print("Creating child for \(String(describing: experience.type)) of type \(String(describing: type(of: experience.bodyType.self)))")
+        let body = reconciler.render(mountedExperience: self)
+        let element = MountedElement(anchor: body, parent: self)
         return [element]
     }
     
-    func createChild(for anchor: AnyAnchor) -> [MountedElement] {
-        print("Creating child for \(String(describing: anchor)) of type \(String(describing: type(of: anchor.bodyType.self)))")
-        let element = MountedElement(model: anchor.body, parent: self)
+    func createChild(for anchor: AnyAnchor, reconciler: StackReconciler<R>) -> [MountedElement] {
+        print("Creating child for \(String(describing: anchor.type)) of type \(String(describing: type(of: anchor.bodyType.self)))")
+        let body = reconciler.render(mountedAnchor: self)
+        let element = MountedElement(model: body, parent: self)
         return [element]
     }
     
-    func createChild(for model: AnyModel) -> [MountedElement] {
+    func createChild(for model: AnyModel, reconciler: StackReconciler<R>) -> [MountedElement] {
         print("Creating child for \(String(describing: model.type))")
         guard model.bodyType != Never.Type.self else {
             if let m = model.model as? ModifiedModelContentDeferredToRenderer {
@@ -139,12 +142,13 @@ class MountedElement<R: Renderer> {
             }
         }
         print("Mounting children for \(model.type)")
-        let child = MountedElement<R>(model: model.body, parent: self)
+        let body = reconciler.render(compositeModel: self)
+        let child = MountedElement<R>(model: body, parent: self)
         return [child]
     }
     
     func update(with reconciler: StackReconciler<R>) {
-        prepareForRender()
+        
         // Todo: Check children
         // If same type: call update
         // if different type: unmount old, mount new
@@ -165,15 +169,7 @@ class MountedElement<R: Renderer> {
                 environmentValues.inject(into: &anchor.anchor, a.type)
         }
     }
-    
-    func injectState() {
-        
-    }
-    
-    func prepareForRender() {
-        updateEnvironment()
-        injectState()
-    }
+
 }
 
 extension EnvironmentValues {

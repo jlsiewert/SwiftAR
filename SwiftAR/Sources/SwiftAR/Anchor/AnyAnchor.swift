@@ -20,7 +20,7 @@ struct AnyAnchor: Anchor {
             self.anchor = anchor
             self.bodyClosure = { AnyModel(erasing: ($0 as! A).body) }
             self.bodyType = A.Body.Type.self
-            self.type = A.Type.self
+            self.type = A.self
         }
     }
     

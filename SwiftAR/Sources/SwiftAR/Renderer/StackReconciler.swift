@@ -88,4 +88,86 @@ class StackReconciler<R: Renderer> {
         return result
     }
     
+    private func queueStorageUpdate(
+        for mountedElement: MountedElement<R>,
+        id: Int,
+        updater: (inout Any) -> ()
+    ) {
+        updater(&mountedElement.store[id])
+        queueUpdate(for: mountedElement)
+    }
+    
+    func setupStorage(
+        id: Int,
+        for property: PropertyInfo,
+        of compositeElement: MountedElement<R>,
+        body bodyKeypath: ReferenceWritableKeyPath<MountedElement<R>, Any>
+    ) {
+        // `ValueStorage` property already filtered out, so safe to assume the value's type
+        // swiftlint:disable:next force_cast
+        var storage = property.get(from: compositeElement[keyPath: bodyKeypath]) as! ValueStorage
+        
+        if compositeElement.store.count == id {
+            compositeElement.store.append(storage.anyInitialValue)
+        }
+        
+        if storage.getter == nil {
+            storage.getter = { compositeElement.store[id] }
+            
+            guard var writableStorage = storage as? WritableValueStorage else {
+                return property.set(value: storage, on: &compositeElement[keyPath: bodyKeypath])
+            }
+            
+            // Avoiding an indirect reference cycle here: this closure can be owned by callbacks
+            // owned by view's target, which is strongly referenced by the reconciler.
+            writableStorage.setter = { [weak self, weak compositeElement] newValue in
+                guard let element = compositeElement else { return }
+                self?.queueStorageUpdate(for: element, id: id) { $0 = newValue }
+            }
+            
+            property.set(value: writableStorage, on: &compositeElement[keyPath: bodyKeypath])
+        }
+    }
+    
+    private func render<T>(
+        compositeElement: MountedElement<R>,
+        body bodyKeypath: ReferenceWritableKeyPath<MountedElement<R>, Any>,
+        result: KeyPath<MountedElement<R>, (Any) -> T>
+    ) -> T {
+        compositeElement.updateEnvironment()
+        if let info = TypeInfo.typeInfo(of: compositeElement._type) {
+            var stateIdx = 0
+            let dynamicProps = info.dynamicProperties(
+                &compositeElement.environmentValues,
+                source: &compositeElement[keyPath: bodyKeypath]
+            )
+            
+//            compositeElement.transientSubscriptions = []
+            for property in dynamicProps {
+                // Setup state/subscriptions
+                if property.type is ValueStorage.Type {
+                    setupStorage(id: stateIdx, for: property, of: compositeElement, body: bodyKeypath)
+                    stateIdx += 1
+                }
+//                if property.type is ObservedProperty.Type {
+//                    setupTransientSubscription(for: property, of: compositeElement, body: bodyKeypath)
+//                }
+            }
+        }
+        
+        return compositeElement[keyPath: result](compositeElement[keyPath: bodyKeypath])
+    }
+    
+    func render(compositeModel: MountedElement<R>) -> AnyModel {
+        render(compositeElement: compositeModel, body: \.model.model, result: \.model.bodyClosure)
+    }
+    
+    func render(mountedAnchor: MountedElement<R>) -> AnyModel {
+        render(compositeElement: mountedAnchor, body: \.anchor.anchor, result: \.anchor.bodyClosure)
+    }
+    
+    func render(mountedExperience: MountedElement<R>) -> AnyAnchor {
+        render(compositeElement: mountedExperience, body: \.experience.experience, result: \.experience.bodyClosure)
+    }
+    
 }

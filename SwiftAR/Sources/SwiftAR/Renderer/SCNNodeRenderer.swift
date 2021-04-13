@@ -17,7 +17,6 @@ public final class SCNNodeRenderer: Renderer {
     public init<E: Experience>(scene: SCNScene, experience: E) {
         self.scene = scene
         self.reconciler = StackReconciler(experience: experience, renderer: self)
-        scene.background.contents = UIColor.lightGray
     }
     
     func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: SCNNode?) -> SCNNode {
@@ -61,7 +60,7 @@ public final class SCNNodeRenderer: Renderer {
     
     func apply(_ modifier: Any, to target: SCNNode) {
         guard let modifier = modifier as? NodeReflectableModifier else {
-            fatalError("Unknown Modifier send to renderer")
+            return
         }
         print("Applying primitive modifier \(modifier) to \(target)")
         modifier.apply(to: target)

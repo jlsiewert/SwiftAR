@@ -14,11 +14,7 @@
 
 import Combine
 
-public struct EnvironmentValues: CustomStringConvertible {
-  public var description: String {
-    "EnvironmentValues: \(values.count)"
-  }
-
+public struct EnvironmentValues {
   private var values: [ObjectIdentifier: Any] = [:]
 
   public init() {}
@@ -49,7 +45,7 @@ struct IsEnabledKey: EnvironmentKey {
   static let defaultValue = true
 }
 
-public extension EnvironmentValues {
+extension EnvironmentValues {
   var isEnabled: Bool {
     get {
       self[IsEnabledKey.self]
@@ -72,7 +68,7 @@ struct _EnvironmentValuesWritingModifier: ModelModifier, EnvironmentModifier {
   }
 }
 
-public extension Model {
+extension Model {
   func environmentValues(_ values: EnvironmentValues) -> some Model {
     modifier(_EnvironmentValuesWritingModifier(environmentValues: values))
   }

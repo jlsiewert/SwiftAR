@@ -8,7 +8,7 @@
 import Foundation
 
 public struct AnyModel: Model {
-    private let bodyClosure: (Any) -> AnyModel
+    let bodyClosure: (Any) -> AnyModel
     /// The type erased model
     var model: Any
     let bodyType: Any.Type
@@ -26,7 +26,7 @@ public struct AnyModel: Model {
                 return AnyModel(erasing: ($0 as! M).body)
             }
             self.bodyType = M.Body.Type.self
-            self.type = M.Type.self
+            self.type = M.self
         }
         
     }

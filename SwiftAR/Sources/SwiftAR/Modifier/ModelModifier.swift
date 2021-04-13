@@ -29,6 +29,7 @@ public protocol ModelModifier {
     func body(content: Content) -> Body
 }
 
+
 public struct _ModelModifierContent<Modifier: ModelModifier>: Model {
     let modifier: Modifier
     let content: AnyModel

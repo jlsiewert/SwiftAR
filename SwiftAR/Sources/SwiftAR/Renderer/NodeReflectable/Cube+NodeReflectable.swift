@@ -10,7 +10,8 @@ import SceneKit
 
 extension Cube: NodeReflectable {
     func create() -> SCNNode {
-        let geometry = SCNBox(width: CGFloat(width), height: CGFloat(height), length: CGFloat(length), chamferRadius: 0)
+        let geometry = SCNBox(width: CGFloat(self.width), height: CGFloat(self.height), length: CGFloat(self.length), chamferRadius: 0)
+        geometry.materials = [ self.self.material.createMaterial() ]
         let node = SCNNode(geometry: geometry)
         return node
         
@@ -18,9 +19,13 @@ extension Cube: NodeReflectable {
     
     func update(_ node: SCNNode) {
         guard let box = node.geometry as? SCNBox else { return }
-        box.width = CGFloat(width)
-        box.height = CGFloat(height)
-        box.length = CGFloat(length)
+        if let m = box.materials.first {
+            self.material.update(material: m)
+        }
+        
+        box.width = CGFloat(self.width)
+        box.height = CGFloat(self.height)
+        box.length = CGFloat(self.length)
     }
     
     

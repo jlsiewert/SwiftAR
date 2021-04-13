@@ -15,6 +15,7 @@ struct PlaygroundExperience: Experience {
                 .translate(x: 1)
                 .scale(0.8)
                 .rotate(yaw: .pi/4)
+                .material(.color(.red))
         }
     }
 }

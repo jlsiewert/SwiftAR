@@ -43,6 +43,7 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         
         let scene = SCNScene()
         scnView.scene = scene
+        scnView.backgroundColor = UIColor(white: 0.98, alpha: 1)
         
         renderer = SCNNodeRenderer(scene: scene, experience: experience)
     }

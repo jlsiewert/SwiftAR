@@ -30,7 +30,7 @@ public struct ModifiedContent<Content: Model, Modifier: ModelModifier>: Model {
     }
 }
 
-extension ModifiedContent: ModifiedModelContentDeferredToRenderer where Modifier: PrimitiveModifier {
+extension ModifiedContent: ModifiedModelContentDeferredToRenderer {
     func createMountedElement<R>(for parent: MountedElement<R>) -> MountedElement<R> where R : Renderer {
         MountedElement(model: content, parent: parent)
     }

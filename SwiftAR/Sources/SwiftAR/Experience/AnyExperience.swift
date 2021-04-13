@@ -20,7 +20,7 @@ struct AnyExperience: Experience {
             self.experience = experience
             self.bodyClosure = { AnyAnchor(erasing: ($0 as! E).body) }
             self.bodyType = E.Body.Type.self
-            self.type = E.Type.self
+            self.type = E.self
         }
     }
     
