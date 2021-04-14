@@ -46,6 +46,27 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         scnView.backgroundColor = UIColor(white: 0.98, alpha: 1)
         
         renderer = SCNNodeRenderer(scene: scene, experience: experience)
+        
+        let gestureRecognoizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
+        scnView.addGestureRecognizer(gestureRecognoizer)
+    }
+    
+    @objc func handleTap(sender: UITapGestureRecognizer) {
+        guard sender.state == .ended else { return }
+        let location = sender.location(in: scnView)
+        
+        // First, check nodes, then raycast
+        if let first = scnView.hitTest(location, options: [:]).first {
+            // Traverse up the hierachy until no more nodes or a `TappableNode` is found
+            var element: SCNNode? = first.node
+            while element != nil {
+                if let tappable = element as? TappableNode {
+                    tappable.onTapHandler()
+                    return
+                }
+                element = element?.parent
+            }
+        }
     }
 }
 

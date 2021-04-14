@@ -8,14 +8,24 @@
 import UIKit
 import SwiftAR
 
+struct TappableCube: Model {
+    @State var isTapped = false
+    var body: some Model {
+        Cube()
+            .material(.color(isTapped ? .red : .blue))
+            .onTap {
+                isTapped.toggle()
+            }
+    }
+}
+
 struct PlaygroundExperience: Experience {
     var body: some Anchor {
         Surface {
-            Cube()
+            TappableCube()
                 .translate(x: 1)
                 .scale(0.8)
                 .rotate(yaw: .pi/4)
-                .material(.color(.red))
         }
     }
 }

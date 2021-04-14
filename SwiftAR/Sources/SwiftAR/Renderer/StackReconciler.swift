@@ -26,12 +26,18 @@
 import Foundation
 
 class StackReconciler<R: Renderer> {
+    /// A type that can be invoked
     typealias Callback = () -> ()
+    /// The scheduler is responsible for running callbacks, usually `DispatchQueue`
     private let scheduler: (@escaping Callback) -> ()
+    /// The renderer actually transforms `MountedElements` into rendered elements
     private(set) weak var renderer: R!
-    
+    /// A set of objects that need to be updated because of state changes
+    private var queuedRenders: Set<MountedElement<R>> = []
+    /// The base objects of the render graph, usually the `Experience`
     private var base: MountedElement<R>!
     
+    /// Creates a new objects from the Experience as root object
     init<E: Experience>(
         experience: E,
         renderer: R,
@@ -44,22 +50,79 @@ class StackReconciler<R: Renderer> {
         performInitialMount()
     }
     
+    /// Mounts the experience and all childs
     func performInitialMount() {
         base.mount(with: self)
     }
     
+    /// Updates the state of all MountedElements queued for rerender
     func updateStateAndReconcile() {
+        let queuedRenders = self.queuedRenders
+        self.queuedRenders.removeAll()
         
+        for mountedElement in queuedRenders {
+            mountedElement.update(with: self)
+        }
     }
     
-    func reconcile(_ element: MountedElement<R>) {
-        
+    /// Checks and updates the children of `element`
+    /// if necessary by either modifying, un- and remounting
+    func reconcile<Element>(
+        _ mountedElement: MountedElement<R>,
+        with element: Element,
+        getElementType: (Element) -> Any.Type,
+        updateChild: (MountedElement<R>) -> (),
+        mountChild: (Element) -> MountedElement<R>
+    ) {
+        guard let parent = mountedElement.element else { return }
+        if mountedElement.children?.isEmpty ?? true {
+            // There was no child, create and mount
+            let child = mountChild(element)
+            mountedElement.children = [child]
+            child.mount(with: self, to: parent)
+        } else if mountedElement.children?.count == 1,
+                  let mountedChild = mountedElement.children?.first {
+            // Compare old and new type
+            // If the same, just update
+            // Else unmount and mount new child
+            let oldChildType = TypeInfo.typeConstructorName(mountedElement._type)
+            let newChildtype = TypeInfo.typeConstructorName(getElementType(element))
+            
+            if oldChildType == newChildtype {
+                // Just update
+                updateChild(mountedChild)
+                mountedChild.update(with: self)
+            } else {
+                // Unmount and remount
+                mountedChild.unmount(with: self)
+                
+                let newChild = mountChild(element)
+                mountedElement.children = [newChild]
+                newChild.mount(with: self, to: parent)
+            }
+        } else {
+            // TODO: Handle elements with multiple children
+            // IDEA: Require that the list is identifiable, then
+            //       - update every existing child, then
+            //       - unmount all old ones, then
+            //       - mount all new one
+            //       since the order of children is irrelevant to SceneKit!
+        }
     }
     
+    /// Marks the element to be rerendered
     func queueUpdate(for element: MountedElement<R>) {
+        let shouldSchedule = queuedRenders.isEmpty
+        queuedRenders.insert(element)
         
+        if shouldSchedule {
+            scheduler({ [weak self] in
+                self?.updateStateAndReconcile()
+            })
+        }
     }
     
+    /// Mounts the element to the renderer
     func mount(_ element: MountedElement<R>, to parent: R.TargetType? = nil) -> R.TargetType {
         let result: R.TargetType
         switch element.mounted {
@@ -88,6 +151,22 @@ class StackReconciler<R: Renderer> {
         return result
     }
     
+    func unmountFromRenderer(_ element: MountedElement<R>) {
+        switch element.mounted {
+            case .experience:
+                fatalError("Experiences can't be unmounted")
+            case .anchor:
+                fatalError("Anchors can't be unomunted")
+            case .model:
+                renderer.unmount(element)
+        }
+    }
+    
+    func updateWithRenderer(_ element: MountedElement<R>) {
+        renderer.update(element)
+    }
+    
+    /// Updates the storage and queues a rerender
     private func queueStorageUpdate(
         for mountedElement: MountedElement<R>,
         id: Int,
@@ -97,6 +176,7 @@ class StackReconciler<R: Renderer> {
         queueUpdate(for: mountedElement)
     }
     
+    /// Setup a `State` object in the `MountedElement`
     func setupStorage(
         id: Int,
         for property: PropertyInfo,
@@ -129,6 +209,9 @@ class StackReconciler<R: Renderer> {
         }
     }
     
+    /// Applies State, Environment etc to the body and updates the body
+    /// of the elment.
+    /// - Returns: The type erased but applied body ( `AnyExperience`, `AnyAnchor`, `AnyModel`)
     private func render<T>(
         compositeElement: MountedElement<R>,
         body bodyKeypath: ReferenceWritableKeyPath<MountedElement<R>, Any>,
@@ -158,14 +241,17 @@ class StackReconciler<R: Renderer> {
         return compositeElement[keyPath: result](compositeElement[keyPath: bodyKeypath])
     }
     
-    func render(compositeModel: MountedElement<R>) -> AnyModel {
-        render(compositeElement: compositeModel, body: \.model.model, result: \.model.bodyClosure)
+    /// Applies state to the body and creates an `AnyModel` from it
+    func render(mountedModel: MountedElement<R>) -> AnyModel {
+        render(compositeElement: mountedModel, body: \.model.model, result: \.model.bodyClosure)
     }
     
+    /// Applies state to the body and creates an `AnyModel` from it
     func render(mountedAnchor: MountedElement<R>) -> AnyModel {
         render(compositeElement: mountedAnchor, body: \.anchor.anchor, result: \.anchor.bodyClosure)
     }
     
+    /// Applies state to the body and creates an `AnyModel` from it
     func render(mountedExperience: MountedElement<R>) -> AnyAnchor {
         render(compositeElement: mountedExperience, body: \.experience.experience, result: \.experience.bodyClosure)
     }

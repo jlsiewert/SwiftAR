@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MountedElement<R: Renderer> {
+class MountedElement<R: Renderer>: Hashable {
     // MARK: - Initialization
     /// Element is the type elements get rendered into
     typealias Element = R.TargetType
@@ -142,16 +142,79 @@ class MountedElement<R: Renderer> {
             }
         }
         print("Mounting children for \(model.type)")
-        let body = reconciler.render(compositeModel: self)
+        let body = reconciler.render(mountedModel: self)
         let child = MountedElement<R>(model: body, parent: self)
         return [child]
     }
     
     func update(with reconciler: StackReconciler<R>) {
-        
-        // Todo: Check children
-        // If same type: call update
-        // if different type: unmount old, mount new
+        guard let element = element else { return }
+        switch mounted {
+            case .experience(let e): self.update(experience: e, with: reconciler, element: element)
+            case .anchor(let a): self.update(anchor: a, with: reconciler, element: element)
+            case .model(let m): self.update(model: m, with: reconciler, element: element)
+        }
+    }
+    
+    private func update(experience: AnyExperience, with reconciler: StackReconciler<R>, element target: R.TargetType) {
+        let element = reconciler.render(mountedExperience: self)
+        reconciler.reconcile(
+            self,
+            with: element,
+            getElementType: { $0.type },
+            updateChild: {
+                $0.environmentValues = environmentValues
+                $0.anchor = AnyAnchor(erasing: element)
+            },
+            mountChild: {
+                let child = MountedElement(anchor: $0, parent: self)
+//                child.mount(with: reconciler, to: target)
+                return child
+            }
+        )
+    }
+    
+    private func update(anchor: AnyAnchor, with reconciler: StackReconciler<R>, element target: R.TargetType) {
+        let element = reconciler.render(mountedAnchor: self)
+        reconciler.reconcile(
+            self,
+            with: element,
+            getElementType: { $0.type },
+            updateChild: {
+                $0.environmentValues = environmentValues
+                $0.model = AnyModel(erasing: element)
+                reconciler.updateWithRenderer(self)
+            },
+            mountChild: {
+                let child = MountedElement(model: $0, parent: self)
+//                child.mount(with: reconciler, to: target)
+                return child
+            }
+        )
+    }
+    
+    private func update(model: AnyModel, with reconciler: StackReconciler<R>, element target: R.TargetType) {
+        let element = reconciler.render(mountedModel: self)
+        reconciler.reconcile(
+            self,
+            with: element,
+            getElementType: { $0.type },
+            updateChild: {
+                $0.environmentValues = environmentValues
+                $0.model = AnyModel(erasing: element)
+                reconciler.updateWithRenderer(self)
+            },
+            mountChild: {
+                let child = MountedElement(model: $0, parent: self)
+//                child.mount(with: reconciler, to: target)
+                return child
+            }
+        )
+    }
+    
+    func unmount(with reconciler: StackReconciler<R>) {
+        children?.forEach( { $0.unmount(with: reconciler) } )
+        reconciler.unmountFromRenderer(self)
     }
     
     // MARK: Storage

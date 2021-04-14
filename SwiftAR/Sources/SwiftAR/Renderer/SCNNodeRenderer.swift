@@ -66,6 +66,23 @@ public final class SCNNodeRenderer: Renderer {
         modifier.apply(to: target)
     }
     
+    func update(_ element: MountedElement<SCNNodeRenderer>) {
+        if case .model = element.mounted {
+            if let model = element.model.model as? NodeReflectable {
+                element.element.map(model.update)
+            } else if let modifier = element.model.model as? NodeReflectableModifier {
+                element.element.map(modifier.apply(to:))
+            }
+        }
+    }
+    
+    func unmount(_ element: MountedElement<SCNNodeRenderer>) {
+        guard case .model = element.mounted else { return }
+        if let model = element.model.model as? NodeReflectable {
+            element.element.map(model.remove(_:))
+        }
+    }
+    
     func createEmpty(for parent: SCNNode) -> SCNNode {
         print("Creating empty node")
         let n = SCNNode()
