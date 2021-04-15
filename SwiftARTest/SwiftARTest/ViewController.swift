@@ -9,13 +9,20 @@ import UIKit
 import SwiftAR
 
 struct TappableCube: Model {
-    @State var counter = 0
+    @State var counter = 2
     var body: some Model {
-        Cube()
-            .material(.color(currentColor))
-            .onTap {
-                counter = counter + 1
-            }
+        ForEach(0..<counter, content: { i in
+            Cube()
+                .material(.color(.red))
+                .translate(x: -0.15 * Float(i + 1))
+                .onTap {
+                    counter += 1
+                    
+                    if counter > 4 {
+                        counter = 1
+                    }
+                }
+        })
     }
     
     var currentColor: UIColor {
@@ -31,12 +38,18 @@ struct TappableCube: Model {
 }
 
 struct PlaygroundExperience: Experience {
+    @State var tapped = true
     var body: some Anchor {
         Surface {
+            Group {
             TappableCube()
-                .translate(x: 0.1)
-            TappableCube()
-                .translate(x: -0.1)
+            Cube()
+                .rotate(yaw: tapped ? 0 : .pi / 4)
+                .onTap {
+                    tapped.toggle()
+                }
+            }
+            .scale(tapped ? 1 : 0.5)
         }
     }
 }

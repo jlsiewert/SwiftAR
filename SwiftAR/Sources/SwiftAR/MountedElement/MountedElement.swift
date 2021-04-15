@@ -131,15 +131,14 @@ class MountedElement<R: Renderer>: Hashable {
     }
     
     func createChild(for model: AnyModel, reconciler: StackReconciler<R>) -> [MountedElement] {
+        if let m = model.model as? ChildProvidingModel {
+            print("Creating Child for ChildProvidingModel \(model.type)")
+            return m.children.map { MountedElement(model: $0, parent: self) }
+        }
         print("Creating child for \(String(describing: model.type))")
         guard model.bodyType != Never.Type.self else {
-            if let m = model.model as? ChildProvidingModel {
-                print("Creating Child for Modified Content \(model.type)")
-                return m.children.map { MountedElement(model: $0, parent: self) }
-            } else {
-                print("Skipping child for \(model.type)")
-                return []
-            }
+            print("Skipping child for \(model.type)")
+            return []
         }
         print("Mounting children for \(model.type)")
         let body = reconciler.render(mountedModel: self)
@@ -198,12 +197,62 @@ class MountedElement<R: Renderer>: Hashable {
         
         guard model.bodyType != Never.Type.self else {
             reconciler.updateWithRenderer(self)
+            let newChildren = (model.model as? ChildProvidingModel)?.children
+            
+            switch (children, newChildren) {
+                case (nil, nil):
+                    break // Nothing to do
+                case (nil, .some(let newChildren)):
+                    let newElements = newChildren.map { Mounted(model: $0, parent: self) }
+                    self.children = newElements
+                    newElements.forEach { $0.mount(with: reconciler, to: target) }
+                case (.some, nil):
+                    self.children?.forEach( { $0.unmount(with: reconciler) })
+                    self.children = []
+                case (.some(let children), .some(let newChildren)):
+                    for i in 0..<children.count {
+                        guard i < newChildren.count else {
+                            // Some childs were removed, unmount them later after the loop
+                            break
+                        }
+                        reconciler.reconcile(children[i], with: newChildren[i], getElementType: {$0.type}, updateChild: {
+                            $0.environmentValues = self.environmentValues
+                            $0.updateEnvironment()
+                            $0.update(with: reconciler)
+                        }, mountChild: {
+                            MountedElement(model: $0, parent: self)
+                        })
+                    }
+                    
+                    if children.count > newChildren.count {
+                        for i in newChildren.count..<children.count {
+                            children[i].unmount(with: reconciler)
+                        }
+                        self.children?.removeLast(children.count - newChildren.count)
+                    } else if newChildren.count > children.count {
+                        var newElements: [Mounted] = []
+                        for i in children.count..<newChildren.count {
+                            let new = Mounted(model: newChildren[i], parent: self)
+                            new.mount(with: reconciler, to: target)
+                            newElements.append(new)
+                        }
+                        self.children?.append(contentsOf: newElements)
+                    }
+                    
+            }
             
             children?.forEach({
                 $0.environmentValues = environmentValues
                 $0.updateEnvironment()
                 $0.update(with: reconciler)
             })
+            
+            if let modifier = model.model as? AppyableModel {
+                modifier.applyModifier({
+                    reconciler.renderer.apply($0, to: target)
+                })
+            }
+            
             return
         }
         let element = reconciler.render(mountedModel: self)

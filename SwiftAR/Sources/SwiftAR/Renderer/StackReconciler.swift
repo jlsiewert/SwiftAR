@@ -107,6 +107,11 @@ class StackReconciler<R: Renderer> {
             //       - unmount all old ones, then
             //       - mount all new one
             //       since the order of children is irrelevant to SceneKit!
+            // Handle arrays
+//            for let currentlyMountedIndex in 0..<(mountedElement.children?.count ?? 0) {
+//                if currentlyMountedIndex <
+//            }
+            print("Not handled")
         }
     }
     
