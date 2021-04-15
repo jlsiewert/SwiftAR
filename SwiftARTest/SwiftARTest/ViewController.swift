@@ -34,9 +34,9 @@ struct PlaygroundExperience: Experience {
     var body: some Anchor {
         Surface {
             TappableCube()
-                .translate(x: 1)
-                .scale(0.8)
-                .rotate(yaw: .pi/4, roll: .pi / 8)
+                .translate(x: 0.1)
+            TappableCube()
+                .translate(x: -0.1)
         }
     }
 }
