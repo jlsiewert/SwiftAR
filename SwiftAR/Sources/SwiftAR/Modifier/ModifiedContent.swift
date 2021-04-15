@@ -11,7 +11,8 @@ protocol ModifierContainer {
     var environmentModifier: EnvironmentModifier? { get }
 }
 
-public struct ModifiedContent<Content: Model, Modifier: ModelModifier>: Model {
+public struct ModifiedContent<Content: Model, Modifier: ModelModifier>: PrimitiveModel {
+    @Environment(\.self) var environment
     
     public init(content: Content, modifier: Modifier) {
         self.content = content
@@ -19,27 +20,28 @@ public struct ModifiedContent<Content: Model, Modifier: ModelModifier>: Model {
     }
     
     let content: Content
-    let modifier: Modifier
-    
-    public var body: Modifier.Body {
-        applied
-    }
-    
-    public var applied: Modifier.Body {
-        modifier.body(content: _ModelModifierContent(modifier: modifier, content: content))
+    private(set) var modifier: Modifier
+
+}
+
+extension ModifiedContent: ChildProvidingModel {
+    var children: [AnyModel] {
+        [AnyModel(erasing: content)]
     }
 }
 
-extension ModifiedContent: ModifiedModelContentDeferredToRenderer {
-    func createMountedElement<R>(for parent: MountedElement<R>) -> MountedElement<R> where R : Renderer {
-        MountedElement(model: content, parent: parent)
-    }
-    
-    func applyToModifier(closure: (Any) -> ()) {
+extension ModifiedContent: AppyableModel {
+    func applyModifier(_ closure: (Any) -> ()) {
         closure(modifier as Any)
     }
 }
 
 extension ModifiedContent: ModifierContainer {
     var environmentModifier: EnvironmentModifier? { modifier as? EnvironmentModifier }
+}
+
+extension ModifiedContent: EnvironmentReader where Modifier: EnvironmentReader {
+    mutating func setContent(from values: EnvironmentValues) {
+        modifier.setContent(from: values)
+    }
 }

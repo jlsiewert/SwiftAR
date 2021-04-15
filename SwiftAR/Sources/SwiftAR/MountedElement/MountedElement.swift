@@ -133,9 +133,9 @@ class MountedElement<R: Renderer>: Hashable {
     func createChild(for model: AnyModel, reconciler: StackReconciler<R>) -> [MountedElement] {
         print("Creating child for \(String(describing: model.type))")
         guard model.bodyType != Never.Type.self else {
-            if let m = model.model as? ModifiedModelContentDeferredToRenderer {
+            if let m = model.model as? ChildProvidingModel {
                 print("Creating Child for Modified Content \(model.type)")
-                return [ m.createMountedElement(for: self) ]
+                return m.children.map { MountedElement(model: $0, parent: self) }
             } else {
                 print("Skipping child for \(model.type)")
                 return []
@@ -149,6 +149,7 @@ class MountedElement<R: Renderer>: Hashable {
     
     func update(with reconciler: StackReconciler<R>) {
         guard let element = element else { return }
+        updateEnvironment()
         switch mounted {
             case .experience(let e): self.update(experience: e, with: reconciler, element: element)
             case .anchor(let a): self.update(anchor: a, with: reconciler, element: element)
@@ -194,15 +195,26 @@ class MountedElement<R: Renderer>: Hashable {
     }
     
     private func update(model: AnyModel, with reconciler: StackReconciler<R>, element target: R.TargetType) {
+        
+        guard model.bodyType != Never.Type.self else {
+            reconciler.updateWithRenderer(self)
+            
+            children?.forEach({
+                $0.environmentValues = environmentValues
+                $0.updateEnvironment()
+                $0.update(with: reconciler)
+            })
+            return
+        }
         let element = reconciler.render(mountedModel: self)
         reconciler.reconcile(
             self,
             with: element,
             getElementType: { $0.type },
             updateChild: {
-                $0.environmentValues = environmentValues
+                $0.environmentValues = self.environmentValues
                 $0.model = AnyModel(erasing: element)
-                reconciler.updateWithRenderer(self)
+                $0.update(with: reconciler)
             },
             mountChild: {
                 let child = MountedElement(model: $0, parent: self)

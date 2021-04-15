@@ -9,13 +9,24 @@ import UIKit
 import SwiftAR
 
 struct TappableCube: Model {
-    @State var isTapped = false
+    @State var counter = 0
     var body: some Model {
         Cube()
-            .material(.color(isTapped ? .red : .blue))
+            .material(.color(currentColor))
             .onTap {
-                isTapped.toggle()
+                counter = counter + 1
             }
+    }
+    
+    var currentColor: UIColor {
+        switch counter % 4 {
+            case 0: return .red
+            case 1: return .yellow
+            case 2: return .green
+            case 3: return .blue
+            default:
+                return .white
+        }
     }
 }
 
@@ -25,7 +36,7 @@ struct PlaygroundExperience: Experience {
             TappableCube()
                 .translate(x: 1)
                 .scale(0.8)
-                .rotate(yaw: .pi/4)
+                .rotate(yaw: .pi/4, roll: .pi / 8)
         }
     }
 }

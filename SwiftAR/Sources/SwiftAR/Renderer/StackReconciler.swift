@@ -85,7 +85,7 @@ class StackReconciler<R: Renderer> {
             // Compare old and new type
             // If the same, just update
             // Else unmount and mount new child
-            let oldChildType = TypeInfo.typeConstructorName(mountedElement._type)
+            let oldChildType = TypeInfo.typeConstructorName(mountedChild._type)
             let newChildtype = TypeInfo.typeConstructorName(getElementType(element))
             
             if oldChildType == newChildtype {
@@ -135,8 +135,8 @@ class StackReconciler<R: Renderer> {
                 
                 result = renderer.mount(element, to: parent)
                 
-                if let modified = element.model.model as? ModifiedModelContentDeferredToRenderer {
-                    modified.applyToModifier {
+                if let modified = element.model.model as? AppyableModel {
+                    modified.applyModifier {
                         renderer.apply($0, to: result)
                     }
                 }

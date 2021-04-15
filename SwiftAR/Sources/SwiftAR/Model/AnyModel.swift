@@ -16,13 +16,10 @@ public struct AnyModel: Model {
 
     public init<M: Model>(erasing model: M) {
         if let model = model as? AnyModel {
-            print("Model is already an AnyModel!")
             self = model
         } else {
-            print("AnyModel: \(Swift.type(of: model))")
             self.model = model
             self.bodyClosure = {
-                print("Running body closure")
                 return AnyModel(erasing: ($0 as! M).body)
             }
             self.bodyType = M.Body.Type.self
