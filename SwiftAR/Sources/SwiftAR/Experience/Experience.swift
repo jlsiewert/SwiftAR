@@ -13,3 +13,15 @@ public protocol Experience {
     
     init()
 }
+
+#if canImport(PlaygroundSupport)
+import PlaygroundSupport
+
+extension Experience {
+    public static func liveView() {
+        let e = Self()
+        let vc = SCNRenderedViewController(experience: e)
+        PlaygroundPage.current.liveView = vc
+    }
+}
+#endif

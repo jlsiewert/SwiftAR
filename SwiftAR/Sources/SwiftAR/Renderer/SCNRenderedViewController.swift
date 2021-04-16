@@ -1,6 +1,6 @@
 //
 //  SCNRenderedViewController.swift
-//  
+//
 //
 //  Created by Jan Luca Siewert on 04.04.21.
 //
@@ -30,7 +30,7 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         #if canImport(PlaygroundSupport)
-        view.frame = self.liveViewSafeAreaGuide
+        view.frame = self.liveViewSafeAreaGuide.layoutFrame
         #else
         scnView.showsStatistics = true
         #endif
@@ -71,5 +71,6 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
 }
 
 #if canImport(PlaygroundSupport)
+import PlaygroundSupport
 extension SCNRenderedViewController: PlaygroundLiveViewSafeAreaContainer { }
 #endif

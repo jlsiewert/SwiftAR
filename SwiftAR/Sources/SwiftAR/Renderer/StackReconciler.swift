@@ -156,10 +156,10 @@ class StackReconciler<R: Renderer> {
                 
                 result = renderer.mount(element, to: parent)
         }
-        guard let result = result else {
+        guard let r = result else {
             fatalError("Not handled!")
         }
-        return result
+        return r
     }
     
     func unmountFromRenderer(_ element: MountedElement<R>) {
