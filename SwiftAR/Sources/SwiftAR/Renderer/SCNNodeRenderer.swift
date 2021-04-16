@@ -9,6 +9,7 @@ import Foundation
 import SceneKit
 
 public final class SCNNodeRenderer: Renderer {
+    
     typealias TargetType = SCNNode
     
     let scene: SCNScene
@@ -19,7 +20,15 @@ public final class SCNNodeRenderer: Renderer {
         self.reconciler = StackReconciler(experience: experience, renderer: self)
     }
     
-    func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: SCNNode?) -> SCNNode {
+    func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: TargetType? = nil) -> SCNNode {
+        self.mount(element, to: parent, whileApplyingOptional: nil)
+    }
+    
+    func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: TargetType? = nil, whileApplying modifier: Any) -> SCNNode {
+        self.mount(element, to: parent, whileApplyingOptional: modifier)
+    }
+    
+    func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: SCNNode?, whileApplyingOptional modifier: Any?) -> SCNNode {
         print("Mount \(element._type)")
         switch element.mounted {
             case .experience:
@@ -34,6 +43,9 @@ public final class SCNNodeRenderer: Renderer {
                     return n
                 }
                 let node = n.create()
+                if let modifier = modifier as? NodeReflectableModifier {
+                    modifier.apply(to: node)
+                }
                 node.name = String(describing: element._type)
                 parent.addChildNode(node)
                 return node
@@ -44,6 +56,9 @@ public final class SCNNodeRenderer: Renderer {
                 if let n = model.model as? NodeReflectable {
                     let node = n.create()
                     node.name = String(describing: element._type)
+                    if let modifier = modifier as? NodeReflectableModifier {
+                        modifier.apply(to: node)
+                    }
                     parent.addChildNode(node)
                     return node
                 } else if let modifier = model.model as? NodeReflectableModifier {
@@ -51,8 +66,12 @@ public final class SCNNodeRenderer: Renderer {
                     modifier.apply(to: parent)
                     return parent
                 } else {
-                    let n = createEmpty(for: parent)
+                    let n = SCNNode()
                     n.name = String(describing: element._type)
+                    if let modifier = modifier as? NodeReflectableModifier {
+                        modifier.apply(to: n)
+                    }
+                    parent.addChildNode(n)
                     return n
                 }
         }

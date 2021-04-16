@@ -16,6 +16,7 @@ struct PlaygroundExperience: Experience {
     var body: some SwiftAR.Anchor {
         Surface {
             Group {
+                Group {
             Sphere(radius: 0.05)
                 .onTap {
                     counter += 1
@@ -27,6 +28,8 @@ struct PlaygroundExperience: Experience {
                         counter = 0
                     }
                     .translate(x: -0.1)
+                }
+                .scale( counter % 2 == 0 ? 1 : 0.8 )
             ForEach(0..<counter) { i in
                 Cube()
                     .material(.color(self.color(for: i)))

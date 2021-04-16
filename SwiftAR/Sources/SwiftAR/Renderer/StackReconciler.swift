@@ -131,7 +131,7 @@ class StackReconciler<R: Renderer> {
     
     /// Mounts the element to the renderer
     func mount(_ element: MountedElement<R>, to parent: R.TargetType? = nil) -> R.TargetType {
-        let result: R.TargetType
+        var result: R.TargetType?
         switch element.mounted {
             case .experience:
                 result = renderer.mount(element, to: nil)
@@ -140,12 +140,14 @@ class StackReconciler<R: Renderer> {
                     fatalError("Call to render before parent was mounted!")
                 }
                 
-                result = renderer.mount(element, to: parent)
+                
                 
                 if let modified = element.model.model as? ApplyableModel, !(modified is OnUpdateElement) {
                     modified.applyModifier {
-                        renderer.apply($0, to: result)
+                        result = renderer.mount(element, to: parent, whileApplying: $0)
                     }
+                } else {
+                    result = renderer.mount(element, to: parent)
                 }
             case .anchor:
                 guard let parent = parent else {
@@ -154,7 +156,9 @@ class StackReconciler<R: Renderer> {
                 
                 result = renderer.mount(element, to: parent)
         }
-      
+        guard let result = result else {
+            fatalError("Not handled!")
+        }
         return result
     }
     

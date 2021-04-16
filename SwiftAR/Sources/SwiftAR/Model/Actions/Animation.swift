@@ -14,10 +14,10 @@ public struct AnimatedModel<Body: Model>: Model {
         case easeOut(TimeInterval)
         case linear(TimeInterval)
         
-        public static var easeInOut: AnimationType { .easeInOut(0.8) }
-        public static var easeIn: AnimationType { .easeIn(0.8) }
-        public static var easeOut: AnimationType { .easeOut(0.8) }
-        public static var linear:AnimationType { .linear(0.8) }
+        public static var easeInOut: AnimationType { .easeInOut(0.4) }
+        public static var easeIn: AnimationType { .easeIn(0.4) }
+        public static var easeOut: AnimationType { .easeOut(0.4) }
+        public static var linear:AnimationType { .linear(0.4) }
     }
     let animation: AnimationType?
     public let body: Body
