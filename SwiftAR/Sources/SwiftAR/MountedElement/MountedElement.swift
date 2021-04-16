@@ -295,7 +295,7 @@ class MountedElement<R: Renderer>: Hashable {
         reconciler.reconcile(
             self,
             with: element,
-            getElementType: { $0.bodyType },
+            getElementType: { $0.type },
             updateChild: {
                 $0.environmentValues = self.environmentValues
                 $0.model = AnyModel(erasing: element)

@@ -142,7 +142,7 @@ class StackReconciler<R: Renderer> {
                 
                 result = renderer.mount(element, to: parent)
                 
-                if let modified = element.model.model as? ApplyableModel {
+                if let modified = element.model.model as? ApplyableModel, !(modified is OnUpdateElement) {
                     modified.applyModifier {
                         renderer.apply($0, to: result)
                     }
@@ -159,6 +159,7 @@ class StackReconciler<R: Renderer> {
     }
     
     func unmountFromRenderer(_ element: MountedElement<R>) {
+        print("Unmounting \(TypeInfo.typeConstructorName(element._type))")
         switch element.mounted {
             case .experience:
                 fatalError("Experiences can't be unmounted")

@@ -33,6 +33,7 @@ struct PlaygroundExperience: Experience {
                     .translate(x: 0.15 * Float(i+1))
             }
             }
+            .animation()
         }
     }
     
