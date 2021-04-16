@@ -10,14 +10,25 @@ import ARKit
 
 protocol ARReflectableAnchor {
     func configuration() -> ARConfiguration
-    func isAnchor(_ anchor: ARAnchor) -> Bool
-    func create() -> ARAnchor?
+    func guidanceHint() -> ARCoachingOverlayView.Goal?
 }
 
-extension Surface: ARReflectableAnchor {
+protocol ARAnchorAttachable: ARReflectableAnchor {
+    func shouldAttach(to anchor: ARAnchor) -> Bool
+}
+
+protocol NodeAttachableAnchor: ARReflectableAnchor {
+    func shouldAttach(to node: SCNNode) -> Bool
+}
+
+extension Surface: ARAnchorAttachable {
+    func shouldAttach(to anchor: ARAnchor) -> Bool {
+        anchor is ARPlaneAnchor
+    }
+    
     func configuration() -> ARConfiguration {
         let config = ARWorldTrackingConfiguration()
-        switch surfaceType {
+        switch self.surfaceType {
             case .any: config.planeDetection = [.horizontal, .vertical]
             case .horizontal: config.planeDetection = [.horizontal]
             case .vertical: config.planeDetection = [.vertical]
@@ -25,26 +36,31 @@ extension Surface: ARReflectableAnchor {
         return config
     }
     
-    func isAnchor(_ anchor: ARAnchor) -> Bool {
-        anchor is ARPlaneAnchor
-    }
-    
-    func create() -> ARAnchor? {
-        nil
+    func guidanceHint() -> ARCoachingOverlayView.Goal? {
+        switch surfaceType {
+            case .any: return .anyPlane
+            case .horizontal: return .horizontalPlane
+            case .vertical: return .verticalPlane
+        }
     }
 }
 
-extension World: ARReflectableAnchor {
-   
+extension World: NodeAttachableAnchor {
+    func shouldAttach(to node: SCNNode) -> Bool {
+        true
+    }
+    
     func configuration() -> ARConfiguration {
         ARWorldTrackingConfiguration()
     }
     
-    func isAnchor(_ anchor: ARAnchor) -> Bool {
-        anchor.name == "world_anchor"
+    func guidanceHint() -> ARCoachingOverlayView.Goal? {
+        #if targetEnvironment(simulator)
+        return nil
+        #else
+        return .tracking
+        #endif
     }
     
-    func create() -> ARAnchor? {
-        return ARAnchor(name: "world_anchor", transform: transform)
-    }
+    
 }

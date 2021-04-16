@@ -12,8 +12,9 @@ import SwiftAR
 
 struct LiveViewExperience: Experience {
     var body: some Anchor {
-        Surface {
+        World {
             Cube()
+                .translate(z: -2)
         }
     }
 }

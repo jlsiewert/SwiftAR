@@ -124,7 +124,7 @@
 			remoteGlobalIDString = FDE1EADE262A351500380B34;
 			remoteInfo = SwiftAR;
 		};
-		FDE1EBA8262A370D00380B34 /* PBXContainerItemProxy */ = {
+		FDE1ECBC262A497C00380B34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E2A7ADD204F611300F4E17A /* Project object */;
 			proxyType = 1;
@@ -728,7 +728,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				FDE1EBA9262A370D00380B34 /* PBXTargetDependency */,
+				FDE1ECBD262A497C00380B34 /* PBXTargetDependency */,
 				5EA2E3D02056F36100416A35 /* PBXTargetDependency */,
 			);
 			name = LiveViewTestApp;
@@ -935,10 +935,10 @@
 			target = FDE1EADE262A351500380B34 /* SwiftAR */;
 			targetProxy = FDE1EBA1262A367100380B34 /* PBXContainerItemProxy */;
 		};
-		FDE1EBA9262A370D00380B34 /* PBXTargetDependency */ = {
+		FDE1ECBD262A497C00380B34 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FDE1EADE262A351500380B34 /* SwiftAR */;
-			targetProxy = FDE1EBA8262A370D00380B34 /* PBXContainerItemProxy */;
+			targetProxy = FDE1ECBC262A497C00380B34 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1041,13 +1041,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.1;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1096,12 +1096,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.1;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1111,9 +1111,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_ENTITLEMENTS = LiveViewTestApp/LiveViewTestApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3JHX23SKBN;
 				GCC_DYNAMIC_NO_PIC = NO;
 				INFOPLIST_FILE = LiveViewTestApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1123,6 +1124,8 @@
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER_PREFIX).LiveViewTestApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
@@ -1138,9 +1141,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_ENTITLEMENTS = LiveViewTestApp/LiveViewTestApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3JHX23SKBN;
 				INFOPLIST_FILE = LiveViewTestApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1149,6 +1153,8 @@
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER_PREFIX).LiveViewTestApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
 					"\"$(OTHER_FRAMEWORKS_DIR)\"",

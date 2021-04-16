@@ -6,17 +6,58 @@
 //
 
 import Foundation
-import SceneKit
+import ARKit
 #if canImport(PlaygroundSupport)
 import PlaygroundSupport
 #endif
 
+class ARSCNViewObserver: NSObject, ARSCNViewDelegate {
+    typealias DidAddNodeForAnchorCallback = (ARAnchor, SCNNode) -> ()
+    var didAddNodeForAnchor: DidAddNodeForAnchorCallback
+    init(callback: @escaping DidAddNodeForAnchorCallback) {
+        self.didAddNodeForAnchor = callback
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        didAddNodeForAnchor(anchor, node)
+    }
+}
+
 public class SCNRenderedViewController<E: Experience>: UIViewController {
-    let scnView = SCNView()
+    enum State {
+        case intitializing
+        case waitingToAttach(ARAnchorAttachable, SCNNode)
+        case attached
+    }
+    
+    lazy var scnView = ARSCNView()
     
     var renderer: SCNNodeRenderer!
     
     let experience: E
+    
+    lazy var experienceNode: SCNNode = {
+        let n = SCNNode()
+        n.name = "Experience"
+        return n
+    }()
+    
+    lazy var coachingView: ARCoachingOverlayView = {
+        let view = ARCoachingOverlayView()
+        view.activatesAutomatically = true
+        view.sessionProvider = scnView
+        return view
+    }()
+    
+    var session: ARSession {
+        scnView.session
+    }
+    
+    var scene: SCNScene {
+        scnView.scene
+    }
+    
+    var state = State.intitializing
     
     public init(experience: E) {
         self.experience = experience
@@ -41,11 +82,23 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         scnView.allowsCameraControl = true
         scnView.autoenablesDefaultLighting = true
         
-        let scene = SCNScene()
-        scnView.scene = scene
-        scnView.backgroundColor = UIColor(white: 0.98, alpha: 1)
+        coachingView.frame = view.frame
+        coachingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(coachingView)
+        view.bringSubviewToFront(coachingView)
         
-        renderer = SCNNodeRenderer(scene: scene, experience: experience)
+        let observer = ARSCNViewObserver { anchor, node in
+            guard case .waitingToAttach(let anyAnchor, let mountedNode) = self.state else {
+                return
+            }
+            if anyAnchor.shouldAttach(to: anchor) {
+                node.addChildNode(mountedNode)
+                self.state = .attached
+            }
+        }
+        scnView.delegate = observer
+        
+        renderer = SCNNodeRenderer(root: experienceNode, experience: experience, delegate: self)
         
         let gestureRecognoizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
         scnView.addGestureRecognizer(gestureRecognoizer)
@@ -69,6 +122,27 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         }
     }
 }
+
+extension SCNRenderedViewController: SCNNodeRendererDelegate {
+    func renderer(_ renderer: SCNNodeRenderer, didMountNode node: SCNNode, for anchor: AnyAnchor) {
+         if case .attached = state { return }
+        if let anchorAttachable = anchor.anchor as? ARAnchorAttachable {
+            if case .intitializing = state {
+                self.session.run(anchorAttachable.configuration(), options: [.resetTracking, .removeExistingAnchors])
+            }
+            self.state = .waitingToAttach(anchorAttachable, node)
+            anchorAttachable.guidanceHint().map { coachingView.goal = $0 }
+        } else if let nodeAttachable = anchor.anchor as? NodeAttachableAnchor {
+            if case .intitializing = state {
+                self.session.run(nodeAttachable.configuration(), options: [.resetTracking, .removeExistingAnchors])
+            }
+            self.state = .attached
+            self.scene.rootNode.addChildNode(node)
+            nodeAttachable.guidanceHint().map { coachingView.goal = $0 }
+        }
+    }
+}
+
 
 #if canImport(PlaygroundSupport)
 import PlaygroundSupport

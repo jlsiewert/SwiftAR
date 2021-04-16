@@ -8,16 +8,22 @@
 import Foundation
 import SceneKit
 
-public final class SCNNodeRenderer: Renderer {
+protocol SCNNodeRendererDelegate: AnyObject {
+    func renderer(_ renderer: SCNNodeRenderer, didMountNode node: SCNNode, for anchor: AnyAnchor)
+}
+
+final class SCNNodeRenderer: Renderer {
     
     typealias TargetType = SCNNode
     
-    let scene: SCNScene
+    let root: SCNNode
     var reconciler: StackReconciler<SCNNodeRenderer>!
+    weak var delegate: SCNNodeRendererDelegate?
     
-    public init<E: Experience>(scene: SCNScene, experience: E) {
-        self.scene = scene
+    init<E: Experience>(root: SCNNode, experience: E, delegate: SCNNodeRendererDelegate) {
+        self.root = root
         self.reconciler = StackReconciler(experience: experience, renderer: self)
+        self.delegate = delegate
     }
     
     func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: TargetType? = nil) -> SCNNode {
@@ -32,22 +38,15 @@ public final class SCNNodeRenderer: Renderer {
         print("Mount \(element._type)")
         switch element.mounted {
             case .experience:
-                return scene.rootNode
+                return root
             case .anchor(let anchor):
                 guard let parent = parent else {
                     fatalError("Attempting to mount anchor without parent")
                 }
-                guard let n = anchor.anchor as? NodeReflectable else {
-                    let n = createEmpty(for: parent)
-                    n.name = String(describing: element._type)
-                    return n
-                }
-                let node = n.create()
-                if let modifier = modifier as? NodeReflectableModifier {
-                    modifier.apply(to: node)
-                }
+                let node = SCNNode()
                 node.name = String(describing: element._type)
                 parent.addChildNode(node)
+                delegate?.renderer(self, didMountNode: parent, for: anchor)
                 return node
             case .model(let model):
                 guard let parent = parent else {

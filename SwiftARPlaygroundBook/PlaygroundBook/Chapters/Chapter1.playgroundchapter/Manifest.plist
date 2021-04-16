@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Name</key>
-	<string>ChapterOneName</string>
+	<string>SwiftAR</string>
 	<key>Pages</key>
 	<array>
 		<string>PlaygroundPage.playgroundpage</string>
