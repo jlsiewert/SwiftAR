@@ -30,7 +30,7 @@ extension ModifiedContent: ChildProvidingModel {
     }
 }
 
-extension ModifiedContent: AppyableModel {
+extension ModifiedContent: ApplyableModel {
     func applyModifier(_ closure: (Any) -> ()) {
         closure(modifier as Any)
     }

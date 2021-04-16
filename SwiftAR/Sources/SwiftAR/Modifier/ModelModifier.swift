@@ -51,6 +51,6 @@ protocol ChildProvidingModel {
     var children: [AnyModel] { get }
 }
 
-protocol AppyableModel {
+protocol ApplyableModel {
     func applyModifier(_ closure: (Any) -> ())
 }

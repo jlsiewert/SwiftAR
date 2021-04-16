@@ -74,6 +74,7 @@ class StackReconciler<R: Renderer> {
         updateChild: (MountedElement<R>) -> (),
         mountChild: (Element) -> MountedElement<R>
     ) {
+        ((element as? AnyModel)?.model as? OnUpdateElement)?.onUpdate()
         guard let parent = mountedElement.element else { return }
         if mountedElement.children?.isEmpty ?? true {
             // There was no child, create and mount
@@ -113,6 +114,7 @@ class StackReconciler<R: Renderer> {
 //            }
             print("Not handled")
         }
+        ((element as? AnyModel)?.model as? OnUpdateElement)?.onUpdatedEnded()
     }
     
     /// Marks the element to be rerendered
@@ -140,7 +142,7 @@ class StackReconciler<R: Renderer> {
                 
                 result = renderer.mount(element, to: parent)
                 
-                if let modified = element.model.model as? AppyableModel {
+                if let modified = element.model.model as? ApplyableModel {
                     modified.applyModifier {
                         renderer.apply($0, to: result)
                     }

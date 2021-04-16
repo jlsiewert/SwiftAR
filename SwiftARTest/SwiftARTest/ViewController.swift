@@ -8,48 +8,40 @@
 import UIKit
 import SwiftAR
 
-struct TappableCube: Model {
-    @State var counter = 2
-    var body: some Model {
-        ForEach(0..<counter, content: { i in
-            Cube()
-                .material(.color(.red))
-                .translate(x: -0.15 * Float(i + 1))
-                .onTap {
-                    counter += 1
-                    
-                    if counter > 4 {
-                        counter = 1
-                    }
-                }
-        })
-    }
-    
-    var currentColor: UIColor {
-        switch counter % 4 {
-            case 0: return .red
-            case 1: return .yellow
-            case 2: return .green
-            case 3: return .blue
-            default:
-                return .white
-        }
-    }
-}
 
 struct PlaygroundExperience: Experience {
-    @State var tapped = true
-    var body: some Anchor {
+    
+    @State var counter = 0
+    
+    var body: some SwiftAR.Anchor {
         Surface {
             Group {
-            TappableCube()
-            Cube()
-                .rotate(yaw: tapped ? 0 : .pi / 4)
+            Sphere(radius: 0.05)
                 .onTap {
-                    tapped.toggle()
+                    counter += 1
                 }
+                .material(.color(.green))
+                Sphere(radius: 0.05)
+                    .material(.color(.red))
+                    .onTap {
+                        counter = 0
+                    }
+                    .translate(x: -0.1)
+            ForEach(0..<counter) { i in
+                Cube()
+                    .material(.color(self.color(for: i)))
+                    .translate(x: 0.15 * Float(i+1))
             }
-            .scale(tapped ? 1 : 0.5)
+            }
+        }
+    }
+    
+    func color(for index: Int) -> UIColor {
+        switch index % 4 {
+            case 0: return .green
+            case 1: return .blue
+            case 2: return .orange
+            default: return .cyan
         }
     }
 }

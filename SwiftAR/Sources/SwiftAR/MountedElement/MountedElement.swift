@@ -65,6 +65,14 @@ class MountedElement<R: Renderer>: Hashable {
         }
     }
     
+    var bodyType: Any.Type {
+        switch mounted {
+            case .anchor(let a): return a.bodyType
+            case .experience(let e): return e.bodyType
+            case .model(let m): return m.bodyType
+        }
+    }
+    
     var element: Element?
     
     weak var parent: Mounted?
@@ -207,21 +215,42 @@ class MountedElement<R: Renderer>: Hashable {
                     self.children = newElements
                     newElements.forEach { $0.mount(with: reconciler, to: target) }
                 case (.some, nil):
-                    self.children?.forEach( { $0.unmount(with: reconciler) })
-                    self.children = []
+                    children?.forEach({ $0.update(with: reconciler) })
                 case (.some(let children), .some(let newChildren)):
                     for i in 0..<children.count {
                         guard i < newChildren.count else {
                             // Some childs were removed, unmount them later after the loop
                             break
                         }
-                        reconciler.reconcile(children[i], with: newChildren[i], getElementType: {$0.type}, updateChild: {
-                            $0.environmentValues = self.environmentValues
-                            $0.updateEnvironment()
-                            $0.update(with: reconciler)
-                        }, mountChild: {
-                            MountedElement(model: $0, parent: self)
-                        })
+                        let oldChild = children[i]
+                        let newChild = newChildren[i]
+                        
+                        let oldChildType = TypeInfo.typeConstructorName(oldChild._type)
+                        let newChildType = TypeInfo.typeConstructorName(newChild.type)
+                        
+                        if oldChildType == newChildType {
+                            oldChild.environmentValues = environmentValues
+                            oldChild.updateEnvironment()
+                            oldChild.model = newChild
+                            oldChild.update(with: reconciler)
+                        } else {
+                            oldChild.unmount(with: reconciler)
+                            let newElement = Mounted(model: newChild, parent: self)
+                            newElement.mount(with: reconciler, to: target)
+                            self.children?[i] = newElement
+                        }
+//                        reconciler.reconcile(
+//                            children[i],
+//                            with: newChildren[i],
+//                            getElementType: {$0.type},
+//                            updateChild: {
+//                                $0.environmentValues = self.environmentValues
+//                                $0.updateEnvironment()
+//                                $0.model = newChildren[i]
+//                                $0.update(with: reconciler)
+//                        }, mountChild: {
+//                            MountedElement(model: $0, parent: self)
+//                        })
                     }
                     
                     if children.count > newChildren.count {
@@ -247,7 +276,7 @@ class MountedElement<R: Renderer>: Hashable {
                 $0.update(with: reconciler)
             })
             
-            if let modifier = model.model as? AppyableModel {
+            if let modifier = model.model as? ApplyableModel {
                 modifier.applyModifier({
                     reconciler.renderer.apply($0, to: target)
                 })
@@ -256,10 +285,17 @@ class MountedElement<R: Renderer>: Hashable {
             return
         }
         let element = reconciler.render(mountedModel: self)
+        
+        if let modifier = element as? ApplyableModel {
+            modifier.applyModifier({
+                reconciler.renderer.apply($0, to: target)
+            })
+        }
+        
         reconciler.reconcile(
             self,
             with: element,
-            getElementType: { $0.type },
+            getElementType: { $0.bodyType },
             updateChild: {
                 $0.environmentValues = self.environmentValues
                 $0.model = AnyModel(erasing: element)

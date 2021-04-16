@@ -9,17 +9,19 @@ import Foundation
 import SwiftUI
 import SceneKit
 
-public extension SCNMaterialProperty {
-    static func view<V: SwiftUI.View>(view: V, size: CGSize = CGSize(width: 500, height: 500)) -> Any {
+extension SCNMaterialProperty {
+    static func view<V: SwiftUI.View>(view: V, size: CGSize = CGSize(width: 200, height: 200)) -> Any {
+        #if targetEnvironment(simulator)
+        return UIColor.lightGray
+        #else
         let vc = UIHostingController(rootView: view)
+        vc.viewWillAppear(true)
+        
         vc.view.backgroundColor = .clear
         vc.view.isOpaque = false
         vc.view.frame = CGRect(origin: .zero, size: size)
-        vc.viewWillAppear(false)
+        
         return vc.view!
-    }
-    
-    convenience init<V: View>(contents view: V) {
-        self.init(contents: view as Any)
+        #endif
     }
 }

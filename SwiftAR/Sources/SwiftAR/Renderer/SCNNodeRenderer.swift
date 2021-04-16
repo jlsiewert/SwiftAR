@@ -77,8 +77,8 @@ public final class SCNNodeRenderer: Renderer {
     }
     
     func unmount(_ element: MountedElement<SCNNodeRenderer>) {
-        guard case .model = element.mounted else { return }
-        if let model = element.model.model as? NodeReflectable {
+        guard case .model(let m) = element.mounted else { return }
+        if let model = m.model as? NodeReflectable {
             element.element.map(model.remove(_:))
         }
     }
