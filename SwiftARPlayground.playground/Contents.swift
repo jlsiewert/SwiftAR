@@ -11,5 +11,19 @@ struct PlaygroundExperience: Experience {
     }
 }
 
-let renderer = SCNRenderedViewController(experience: PlaygroundExperience())
-PlaygroundPage.current.liveView = renderer.view
+extension Experience {
+    /// Presents the experience in the Playground live view.
+    public static func liveView() {
+        #if canImport(PlaygroundSupport)
+        let e = Self()
+        let r = SCNRenderedViewController(experience: e)
+        PlaygroundPage.current.liveView = r.view
+        #else
+        fatalError("PlaygroundSupport not available")
+        #endif
+    }
+}
+
+
+
+PlaygroundExperience.liveView()
