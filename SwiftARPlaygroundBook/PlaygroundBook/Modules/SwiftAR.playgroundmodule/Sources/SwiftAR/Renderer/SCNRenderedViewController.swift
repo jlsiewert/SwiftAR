@@ -59,6 +59,8 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     
     var state = State.intitializing
     
+    var observer: ARSCNViewObserver!
+    
     public init(experience: E) {
         self.experience = experience
         super.init(nibName: nil, bundle: nil)
@@ -87,8 +89,8 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         view.addSubview(coachingView)
         view.bringSubviewToFront(coachingView)
         
-        let observer = ARSCNViewObserver { anchor, node in
-            guard case .waitingToAttach(let anyAnchor, let mountedNode) = self.state else {
+        observer = ARSCNViewObserver { [weak self] anchor, node in
+            guard let self = self, case .waitingToAttach(let anyAnchor, let mountedNode) = self.state else {
                 return
             }
             if anyAnchor.shouldAttach(to: anchor) {
@@ -145,6 +147,5 @@ extension SCNRenderedViewController: SCNNodeRendererDelegate {
 
 
 #if canImport(PlaygroundSupport)
-import PlaygroundSupport
 extension SCNRenderedViewController: PlaygroundLiveViewSafeAreaContainer { }
 #endif
