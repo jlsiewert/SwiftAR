@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		5E086DD32051E3A3004D8D25 /* Manifest.plist in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5E086DCF2051DF0F004D8D25 /* Manifest.plist */; };
 		5E551EC52371FC3F00784365 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E551EC42371FC3F00784365 /* Assets.xcassets */; };
-		5E6F7E592367B529008CC191 /* UserModules in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5E6F7E582367B51E008CC191 /* UserModules */; };
 		5E70679F23678DC30094BDEF /* Modules in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5E70679E23678DC00094BDEF /* Modules */; };
 		5EA2E3C02056F35A00416A35 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA2E3BF2056F35A00416A35 /* AppDelegate.swift */; };
 		5EA2E3CA2056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EA2E3C82056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard */; };
@@ -143,7 +142,6 @@
 				5E086DD32051E3A3004D8D25 /* Manifest.plist in Copy Book Contents */,
 				5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */,
 				5E70679F23678DC30094BDEF /* Modules in Copy Book Contents */,
-				5E6F7E592367B529008CC191 /* UserModules in Copy Book Contents */,
 			);
 			name = "Copy Book Contents";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,7 +301,6 @@
 			children = (
 				5E086DCF2051DF0F004D8D25 /* Manifest.plist */,
 				5E70679B23678D810094BDEF /* Modules */,
-				5E7067A023678DED0094BDEF /* UserModules */,
 				5EF2F9792054B64800191409 /* PrivateResources */,
 				5EF2F9B62054E6F900191409 /* Chapters */,
 				5EF2F9A42054BB9500191409 /* Supporting Content */,
@@ -366,13 +363,6 @@
 				FDE1EAD9262A33F900380B34 /* SwiftAR.playgroundmodule */,
 			);
 			path = Modules;
-			sourceTree = "<group>";
-		};
-		5E7067A023678DED0094BDEF /* UserModules */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UserModules;
 			sourceTree = "<group>";
 		};
 		5EA2E3BE2056F35A00416A35 /* LiveViewTestApp */ = {
@@ -476,9 +466,9 @@
 		FDE1EBD7262A3B2D00380B34 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				FDE1EBDA262A3B2D00380B34 /* NodeReflectable */,
 				FDE1EBD8262A3B2D00380B34 /* SCNNodeRenderer.swift */,
 				FDE1EBD9262A3B2D00380B34 /* SCNRenderedViewController.swift */,
-				FDE1EBDA262A3B2D00380B34 /* NodeReflectable */,
 				FDE1EBE2262A3B2D00380B34 /* StackReconciler.swift */,
 				FDE1EBE3262A3B2D00380B34 /* Renderer.swift */,
 			);

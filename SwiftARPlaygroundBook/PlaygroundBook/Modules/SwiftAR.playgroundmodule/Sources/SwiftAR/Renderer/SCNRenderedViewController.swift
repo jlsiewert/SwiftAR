@@ -79,10 +79,8 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         #endif
         scnView.frame = view.frame
         scnView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        scnView.automaticallyUpdatesLighting = true
         view.addSubview(scnView)
-        
-        scnView.allowsCameraControl = true
-        scnView.autoenablesDefaultLighting = true
         
         coachingView.frame = view.frame
         coachingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -127,20 +125,25 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
 
 extension SCNRenderedViewController: SCNNodeRendererDelegate {
     func renderer(_ renderer: SCNNodeRenderer, didMountNode node: SCNNode, for anchor: AnyAnchor) {
+        print("Starting AR experience")
          if case .attached = state { return }
         if let anchorAttachable = anchor.anchor as? ARAnchorAttachable {
             if case .intitializing = state {
                 self.session.run(anchorAttachable.configuration(), options: [.resetTracking, .removeExistingAnchors])
+                self.state = .waitingToAttach(anchorAttachable, node)
+                anchorAttachable.guidanceHint().map { coachingView.goal = $0 }
             }
-            self.state = .waitingToAttach(anchorAttachable, node)
-            anchorAttachable.guidanceHint().map { coachingView.goal = $0 }
-        } else if let nodeAttachable = anchor.anchor as? NodeAttachableAnchor {
+            
+        } else if let nodeAttachable = anchor.anchor as? NodeAttachableAnchor,
+                  nodeAttachable.shouldAttach(to: node),
+                  case .intitializing = state {
             if case .intitializing = state {
                 self.session.run(nodeAttachable.configuration(), options: [.resetTracking, .removeExistingAnchors])
+                self.state = .attached
+                self.scene.rootNode.addChildNode(node)
+                nodeAttachable.guidanceHint().map { coachingView.goal = $0 }
             }
-            self.state = .attached
-            self.scene.rootNode.addChildNode(node)
-            nodeAttachable.guidanceHint().map { coachingView.goal = $0 }
+            
         }
     }
 }

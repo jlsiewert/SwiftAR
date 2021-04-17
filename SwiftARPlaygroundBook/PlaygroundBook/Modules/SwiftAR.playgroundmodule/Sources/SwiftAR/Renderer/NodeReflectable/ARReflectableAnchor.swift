@@ -28,6 +28,9 @@ extension Surface: ARAnchorAttachable {
     
     func configuration() -> ARConfiguration {
         let config = ARWorldTrackingConfiguration()
+        config.environmentTexturing = .automatic
+        config.wantsHDREnvironmentTextures = true
+        config.isLightEstimationEnabled = true
         switch self.surfaceType {
             case .any: config.planeDetection = [.horizontal, .vertical]
             case .horizontal: config.planeDetection = [.horizontal]
@@ -51,7 +54,11 @@ extension World: NodeAttachableAnchor {
     }
     
     func configuration() -> ARConfiguration {
-        ARWorldTrackingConfiguration()
+        let config = ARWorldTrackingConfiguration()
+        config.environmentTexturing = .automatic
+        config.wantsHDREnvironmentTextures = true
+        config.isLightEstimationEnabled = true
+        return config
     }
     
     func guidanceHint() -> ARCoachingOverlayView.Goal? {

@@ -18,12 +18,14 @@ final class SCNNodeRenderer: Renderer {
     
     let root: SCNNode
     var reconciler: StackReconciler<SCNNodeRenderer>!
-    weak var delegate: SCNNodeRendererDelegate?
+    // This introduces a retain cycle but otherwise
+    // the playground does not retain the ViewController!
+    var delegate: SCNNodeRendererDelegate
     
     init<E: Experience>(root: SCNNode, experience: E, delegate: SCNNodeRendererDelegate) {
         self.root = root
-        self.reconciler = StackReconciler(experience: experience, renderer: self)
         self.delegate = delegate
+        self.reconciler = StackReconciler(experience: experience, renderer: self)
     }
     
     func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: TargetType? = nil) -> SCNNode {
@@ -46,7 +48,7 @@ final class SCNNodeRenderer: Renderer {
                 let node = SCNNode()
                 node.name = String(describing: element._type)
                 parent.addChildNode(node)
-                delegate?.renderer(self, didMountNode: parent, for: anchor)
+                delegate.renderer(self, didMountNode: parent, for: anchor)
                 return node
             case .model(let model):
                 guard let parent = parent else {
