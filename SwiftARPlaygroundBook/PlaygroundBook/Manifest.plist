@@ -23,7 +23,7 @@
 	<key>UserAutoImportedAuxiliaryModules</key>
 	<array/>
 	<key>UserModuleMode</key>
-	<string>Full</string>
+	<string>Disabled</string>
 	<key>SupportsDarkMode</key>
 	<true/>
 </dict>
