@@ -20,6 +20,8 @@ extension Material {
     func createMaterial() -> SCNMaterial {
         let m = SCNMaterial()
         m.diffuse.contents = materialProperty
+        m.diffuse.intensity = 1
+        m.lightingModel = .physicallyBased
         return m
     }
     

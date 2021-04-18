@@ -14,7 +14,7 @@ public enum Material: Equatable {
     case texture(UIImage)
     case _swiftUIview(SwiftUI.AnyView)
     
-    static func view<V: View>(_ view: V) -> Material {
+    public static func view<V: View>(_ view: V) -> Material {
         ._swiftUIview(AnyView(erasing: view))
     }
 }

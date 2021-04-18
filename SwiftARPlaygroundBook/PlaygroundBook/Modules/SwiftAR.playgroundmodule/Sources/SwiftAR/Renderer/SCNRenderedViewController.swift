@@ -80,6 +80,10 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         scnView.frame = view.frame
         scnView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         scnView.automaticallyUpdatesLighting = true
+        let point = SCNLight()
+        point.type = .ambient
+        point.intensity = 300
+        scnView.scene.rootNode.light = point
         view.addSubview(scnView)
         
         coachingView.frame = view.frame
