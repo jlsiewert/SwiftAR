@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  Model+Material.swift
+//  SwiftAr
 //
 //  Created by Jan Luca Siewert on 13.04.21.
 //

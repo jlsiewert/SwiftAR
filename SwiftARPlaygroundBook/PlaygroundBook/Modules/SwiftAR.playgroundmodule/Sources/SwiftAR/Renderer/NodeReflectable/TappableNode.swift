@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  TappableNode.swift
+//  SwiftAR
 //
 //  Created by Jan Luca Siewert on 14.04.21.
 //

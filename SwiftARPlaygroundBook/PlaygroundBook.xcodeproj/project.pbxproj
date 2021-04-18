@@ -43,7 +43,6 @@
 		FDE1EC49262A3B2D00380B34 /* Never+ProtocolConformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EBF2262A3B2D00380B34 /* Never+ProtocolConformance.swift */; };
 		FDE1EC4A262A3B2D00380B34 /* simd+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EBF3262A3B2D00380B34 /* simd+Extensions.swift */; };
 		FDE1EC4B262A3B2D00380B34 /* MountedElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EBF5262A3B2D00380B34 /* MountedElement.swift */; };
-		FDE1EC4C262A3B2D00380B34 /* MountedElement+NodeReflectible.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EBF6262A3B2D00380B34 /* MountedElement+NodeReflectible.swift */; };
 		FDE1EC4D262A3B2D00380B34 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EBF8262A3B2D00380B34 /* Model.swift */; };
 		FDE1EC4E262A3B2D00380B34 /* EmptyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EBFA262A3B2D00380B34 /* EmptyModel.swift */; };
 		FDE1EC4F262A3B2D00380B34 /* Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EBFB262A3B2D00380B34 /* Cylinder.swift */; };
@@ -222,7 +221,6 @@
 		FDE1EBF2262A3B2D00380B34 /* Never+ProtocolConformance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Never+ProtocolConformance.swift"; sourceTree = "<group>"; };
 		FDE1EBF3262A3B2D00380B34 /* simd+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "simd+Extensions.swift"; sourceTree = "<group>"; };
 		FDE1EBF5262A3B2D00380B34 /* MountedElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MountedElement.swift; sourceTree = "<group>"; };
-		FDE1EBF6262A3B2D00380B34 /* MountedElement+NodeReflectible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MountedElement+NodeReflectible.swift"; sourceTree = "<group>"; };
 		FDE1EBF8262A3B2D00380B34 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		FDE1EBFA262A3B2D00380B34 /* EmptyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyModel.swift; sourceTree = "<group>"; };
 		FDE1EBFB262A3B2D00380B34 /* Cylinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cylinder.swift; sourceTree = "<group>"; };
@@ -539,7 +537,6 @@
 			isa = PBXGroup;
 			children = (
 				FDE1EBF5262A3B2D00380B34 /* MountedElement.swift */,
-				FDE1EBF6262A3B2D00380B34 /* MountedElement+NodeReflectible.swift */,
 			);
 			path = MountedElement;
 			sourceTree = "<group>";
@@ -843,7 +840,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FDE1EC6E262A3B2D00380B34 /* ValueWitnessTable.swift in Sources */,
-				FDE1EC4C262A3B2D00380B34 /* MountedElement+NodeReflectible.swift in Sources */,
 				FDE1EC3A262A3B2D00380B34 /* NodeReflectable.swift in Sources */,
 				FDE1EC36262A3B2D00380B34 /* Cube+NodeReflectable.swift in Sources */,
 				FDE1EC53262A3B2D00380B34 /* PrimitiveModel.swift in Sources */,

@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  Binding+SwiftUI.swift
+//  SwiftAR
 //
 //  Created by Jan Luca Siewert on 15.04.21.
 //

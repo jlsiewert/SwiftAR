@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  OnTapModel.swift
+//  SwifAR
 //
 //  Created by Jan Luca Siewert on 14.04.21.
 //

@@ -1,6 +1,6 @@
 //
 //  Material.swift
-//  
+//  SwiftAR
 //
 //  Created by Jan Luca Siewert on 13.04.21.
 //

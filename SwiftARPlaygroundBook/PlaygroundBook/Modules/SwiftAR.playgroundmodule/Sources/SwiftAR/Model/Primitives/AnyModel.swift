@@ -1,6 +1,6 @@
 //
 //  AnyModel.swift
-//  
+//  SwiftAR
 //
 //  Created by Jan Luca Siewert on 10.04.21.
 //

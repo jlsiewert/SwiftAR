@@ -1,9 +1,10 @@
 //
 //  MountedElement.swift
-//  
+//  SwiftAR
 //
 //  Created by Jan Luca Siewert on 04.04.21.
 //
+//  Based on the implementation of Tokamak
 
 import Foundation
 

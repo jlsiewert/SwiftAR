@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  SCNNodeRenderer.swift
+//  SwiftAR
 //
 //  Created by Jan Luca Siewert on 04.04.21.
 //
