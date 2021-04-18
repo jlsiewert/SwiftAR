@@ -61,6 +61,8 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     
     var observer: ARSCNViewObserver!
     
+    var raycastHandler: ((simd_float4x4) -> ())?
+    
     public init(experience: E) {
         self.experience = experience
         super.init(nibName: nil, bundle: nil)
@@ -124,6 +126,12 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
                 element = element?.parent
             }
         }
+        
+        if let raycastHandler = self.raycastHandler,
+        let raycast = scnView.raycastQuery(from: location, allowing: .estimatedPlane, alignment: .any),
+        let result = session.raycast(raycast).first {
+            raycastHandler(result.worldTransform)
+        }
     }
 }
 
@@ -148,6 +156,9 @@ extension SCNRenderedViewController: SCNNodeRendererDelegate {
                 nodeAttachable.guidanceHint().map { coachingView.goal = $0 }
             }
             
+        }
+        if let raycastHandler = (anchor.anchor as? RaycastHandlingAnchor)?.raycast {
+            self.raycastHandler = raycastHandler
         }
     }
 }

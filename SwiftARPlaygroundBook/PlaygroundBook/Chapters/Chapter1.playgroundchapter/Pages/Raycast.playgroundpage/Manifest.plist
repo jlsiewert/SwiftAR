@@ -3,11 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>Name</key>
-	<string>SwiftAR</string>
-	<key>Pages</key>
-	<array>
-		<string>PlaygroundPage.playgroundpage</string>
-		<string>Raycast.playgroundpage</string>
-	</array>
+	<string>Interactivity</string>
+	<key>LiveViewEdgeToEdge</key>
+	<true/>
+	<key>LiveViewMode</key>
+	<string>VisibleByDefault</string>
 </dict>
 </plist>

@@ -21,6 +21,10 @@ protocol NodeAttachableAnchor: ARReflectableAnchor {
     func shouldAttach(to node: SCNNode) -> Bool
 }
 
+protocol RaycastHandlingAnchor {
+    var raycast: ((simd_float4x4) -> ())? { get }
+}
+
 extension Surface: ARAnchorAttachable {
     func shouldAttach(to anchor: ARAnchor) -> Bool {
         anchor is ARPlaneAnchor
@@ -48,7 +52,7 @@ extension Surface: ARAnchorAttachable {
     }
 }
 
-extension World: NodeAttachableAnchor {
+extension World: NodeAttachableAnchor, RaycastHandlingAnchor {
     func shouldAttach(to node: SCNNode) -> Bool {
         true
     }
