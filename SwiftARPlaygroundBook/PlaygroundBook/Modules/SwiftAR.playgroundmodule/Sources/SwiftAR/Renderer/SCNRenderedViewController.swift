@@ -161,6 +161,10 @@ extension SCNRenderedViewController: SCNNodeRendererDelegate {
             self.raycastHandler = raycastHandler
         }
     }
+    
+    var pointOfView: SCNNode? {
+        scnView.pointOfView
+    }
 }
 
 

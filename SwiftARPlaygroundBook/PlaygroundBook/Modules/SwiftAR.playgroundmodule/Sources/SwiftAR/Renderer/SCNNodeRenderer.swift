@@ -10,6 +10,7 @@ import SceneKit
 
 protocol SCNNodeRendererDelegate: AnyObject {
     func renderer(_ renderer: SCNNodeRenderer, didMountNode node: SCNNode, for anchor: AnyAnchor)
+    var pointOfView: SCNNode? { get }
 }
 
 final class SCNNodeRenderer: Renderer {
@@ -58,19 +59,19 @@ final class SCNNodeRenderer: Renderer {
                     let node = n.create()
                     node.name = String(describing: element._type)
                     if let modifier = modifier as? NodeReflectableModifier {
-                        modifier.apply(to: node)
+                        modifier.apply(to: node, with: self)
                     }
                     parent.addChildNode(node)
                     return node
                 } else if let modifier = model.model as? NodeReflectableModifier {
                     parent.name = "\(parent.name ?? "")_\(String(describing: element._type))"
-                    modifier.apply(to: parent)
+                    modifier.apply(to: parent, with: self)
                     return parent
                 } else {
                     let n = SCNNode()
                     n.name = String(describing: element._type)
                     if let modifier = modifier as? NodeReflectableModifier {
-                        modifier.apply(to: n)
+                        modifier.apply(to: n, with: self)
                     }
                     parent.addChildNode(n)
                     return n
@@ -83,7 +84,7 @@ final class SCNNodeRenderer: Renderer {
             return
         }
         print("Applying primitive modifier \(modifier) to \(target)")
-        modifier.apply(to: target)
+        modifier.apply(to: target, with: self)
     }
     
     func update(_ element: MountedElement<SCNNodeRenderer>) {
@@ -91,7 +92,7 @@ final class SCNNodeRenderer: Renderer {
             if let model = element.model.model as? NodeReflectable {
                 element.element.map(model.update)
             } else if let modifier = element.model.model as? NodeReflectableModifier {
-                element.element.map(modifier.apply(to:))
+                element.element.map( { modifier.apply(to: $0, with: self) })
             }
         }
     }

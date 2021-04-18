@@ -9,5 +9,5 @@ import Foundation
 import SceneKit
 
 protocol NodeReflectableModifier {
-    func apply(to node: SCNNode)
+    func apply<R: Renderer>(to node: SCNNode, with renderer: R?)
 }

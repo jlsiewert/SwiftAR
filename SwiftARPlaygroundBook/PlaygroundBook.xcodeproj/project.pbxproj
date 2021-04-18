@@ -91,6 +91,8 @@
 		FDE1EC7A262A3B2D00380B34 /* typeConstructorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EC31262A3B2D00380B34 /* typeConstructorName.swift */; };
 		FDE77FA9262C33FF008F3A34 /* PublicResources in Resources */ = {isa = PBXBuildFile; fileRef = FDE77FA8262C33FF008F3A34 /* PublicResources */; };
 		FDE77FAE262C3414008F3A34 /* PublicResources in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = FDE77FA8262C33FF008F3A34 /* PublicResources */; };
+		FDE77FB4262C6321008F3A34 /* LookAt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE77FB3262C6321008F3A34 /* LookAt.swift */; };
+		FDE77FB8262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE77FB7262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -268,6 +270,8 @@
 		FDE1EC30262A3B2D00380B34 /* MetadataState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataState.swift; sourceTree = "<group>"; };
 		FDE1EC31262A3B2D00380B34 /* typeConstructorName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = typeConstructorName.swift; sourceTree = "<group>"; };
 		FDE77FA8262C33FF008F3A34 /* PublicResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PublicResources; sourceTree = "<group>"; };
+		FDE77FB3262C6321008F3A34 /* LookAt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookAt.swift; sourceTree = "<group>"; };
+		FDE77FB7262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LookAtModifier+NodeReflectable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -488,6 +492,7 @@
 				FDE1EBDF262A3B2D00380B34 /* NodeReflectable.swift */,
 				FDE1EBE0262A3B2D00380B34 /* ARReflectableAnchor.swift */,
 				FDE1EBE1262A3B2D00380B34 /* NodeReflectable+Modifier.swift */,
+				FDE77FB7262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift */,
 			);
 			path = NodeReflectable;
 			sourceTree = "<group>";
@@ -499,6 +504,7 @@
 				FDE1EBE6262A3B2D00380B34 /* PrimitiveModifier.swift */,
 				FDE1EBE7262A3B2D00380B34 /* TransformModifier.swift */,
 				FDE1EBE8262A3B2D00380B34 /* ModelModifier.swift */,
+				FDE77FB3262C6321008F3A34 /* LookAt.swift */,
 			);
 			path = Modifier;
 			sourceTree = "<group>";
@@ -867,6 +873,7 @@
 				FDE1EC39262A3B2D00380B34 /* TappableNode.swift in Sources */,
 				FDE1EC56262A3B2D00380B34 /* TupelModel.swift in Sources */,
 				FDE1EC78262A3B2D00380B34 /* StructMetadata.swift in Sources */,
+				FDE77FB8262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift in Sources */,
 				FDE1EC49262A3B2D00380B34 /* Never+ProtocolConformance.swift in Sources */,
 				FDE1EC67262A3B2D00380B34 /* SwiftUIMaterial.swift in Sources */,
 				FDE1EC5E262A3B2D00380B34 /* EnvironmentObject.swift in Sources */,
@@ -884,6 +891,7 @@
 				FDE1EC4B262A3B2D00380B34 /* MountedElement.swift in Sources */,
 				FDE1EC77262A3B2D00380B34 /* Metadata.swift in Sources */,
 				FDE1EC44262A3B2D00380B34 /* State.swift in Sources */,
+				FDE77FB4262C6321008F3A34 /* LookAt.swift in Sources */,
 				FDE1EC3D262A3B2D00380B34 /* StackReconciler.swift in Sources */,
 				FDE1EC61262A3B2D00380B34 /* Anchor.swift in Sources */,
 				FDE1EC34262A3B2D00380B34 /* SCNNodeRenderer.swift in Sources */,
