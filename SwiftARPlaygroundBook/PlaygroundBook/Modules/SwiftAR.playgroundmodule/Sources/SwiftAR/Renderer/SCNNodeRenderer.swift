@@ -55,27 +55,30 @@ final class SCNNodeRenderer: Renderer {
                 guard let parent = parent else {
                     fatalError("Attempting to mount anchor without parent")
                 }
+                
+                let node: SCNNode
+                
                 if let n = model.model as? NodeReflectable {
-                    let node = n.create()
+                    node = n.create()
                     node.name = String(describing: element._type)
                     if let modifier = modifier as? NodeReflectableModifier {
                         modifier.apply(to: node, with: self)
                     }
                     parent.addChildNode(node)
-                    return node
                 } else if let modifier = model.model as? NodeReflectableModifier {
                     parent.name = "\(parent.name ?? "")_\(String(describing: element._type))"
                     modifier.apply(to: parent, with: self)
-                    return parent
+                    node = parent
                 } else {
-                    let n = SCNNode()
-                    n.name = String(describing: element._type)
+                    node = SCNNode()
+                    node.name = String(describing: element._type)
                     if let modifier = modifier as? NodeReflectableModifier {
-                        modifier.apply(to: n, with: self)
+                        modifier.apply(to: node, with: self)
                     }
-                    parent.addChildNode(n)
-                    return n
+                    parent.addChildNode(node)
                 }
+                
+                return node
         }
     }
     
@@ -98,10 +101,7 @@ final class SCNNodeRenderer: Renderer {
     }
     
     func unmount(_ element: MountedElement<SCNNodeRenderer>) {
-        guard case .model(let m) = element.mounted else { return }
-        if let model = m.model as? NodeReflectable {
-            element.element.map(model.remove(_:))
-        }
+        element.element?.removeFromParentNode()
     }
     
     func createEmpty(for parent: SCNNode) -> SCNNode {

@@ -10,14 +10,7 @@ import PlaygroundSupport
 import LiveViewHost
 import SwiftAR
 
-struct LiveViewExperience: Experience {
-    var body: some Anchor {
-        World {
-            Cube()
-                .translate(z: -2)
-        }
-    }
-}
+typealias LiveViewExperience = SolarSystemExperience
 
 @UIApplicationMain
 class AppDelegate: LiveViewHost.AppDelegate {

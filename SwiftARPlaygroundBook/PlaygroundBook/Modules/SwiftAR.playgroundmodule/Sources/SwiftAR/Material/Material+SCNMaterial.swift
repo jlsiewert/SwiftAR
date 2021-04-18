@@ -33,7 +33,6 @@ extension Material {
     func update(material: SCNMaterial) {
         switch self {
             case ._swiftUIview:
-                assertionFailure("Updating a material from a view is unsupported")
                 return
             default:
                 break

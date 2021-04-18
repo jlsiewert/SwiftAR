@@ -30,7 +30,11 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         case attached
     }
     
+    #if targetEnvironment(simulator)
+    lazy var scnView = SCNView()
+    #else
     lazy var scnView = ARSCNView()
+    #endif
     
     var renderer: SCNNodeRenderer!
     
@@ -42,6 +46,11 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         return n
     }()
     
+    #if targetEnvironment(simulator)
+    var scene: SCNScene {
+        scnView.scene!
+    }
+    #else
     lazy var coachingView: ARCoachingOverlayView = {
         let view = ARCoachingOverlayView()
         view.activatesAutomatically = true
@@ -56,12 +65,15 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     var scene: SCNScene {
         scnView.scene
     }
+    #endif
     
     var state = State.intitializing
     
     var observer: ARSCNViewObserver!
     
     var raycastHandler: ((simd_float4x4) -> ())?
+    
+    var gestureRecognizerInstalled = false
     
     public init(experience: E) {
         self.experience = experience
@@ -75,23 +87,32 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         #if canImport(PlaygroundSupport)
-        view.frame = self.liveViewSafeAreaGuide.layoutFrame
-        #else
-        scnView.showsStatistics = true
+        view.frame = self.liveViewSafeAreaGuide.layoutFrame        
         #endif
         scnView.frame = view.frame
         scnView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        #if targetEnvironment(simulator)
+        scnView.allowsCameraControl = true
+        scnView.showsStatistics = true
+        #else
         scnView.automaticallyUpdatesLighting = true
+        #endif
         let point = SCNLight()
         point.type = .ambient
         point.intensity = 300
-        scnView.scene.rootNode.light = point
+        #if targetEnvironment(simulator)
+        scnView.scene = SCNScene()
+        #endif
+        scene.rootNode.light = point
         view.addSubview(scnView)
         
+        #if !targetEnvironment(simulator)
         coachingView.frame = view.frame
         coachingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(coachingView)
         view.bringSubviewToFront(coachingView)
+        self.registerGestureRecognizer()
         
         observer = ARSCNViewObserver { [weak self] anchor, node in
             guard let self = self, case .waitingToAttach(let anyAnchor, let mountedNode) = self.state else {
@@ -103,11 +124,9 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
             }
         }
         scnView.delegate = observer
+        #endif
         
         renderer = SCNNodeRenderer(root: experienceNode, experience: experience, delegate: self)
-        
-        let gestureRecognoizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
-        scnView.addGestureRecognizer(gestureRecognoizer)
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
@@ -126,18 +145,25 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
                 element = element?.parent
             }
         }
-        
+        #if !targetEnvironment(simulator)
         if let raycastHandler = self.raycastHandler,
         let raycast = scnView.raycastQuery(from: location, allowing: .estimatedPlane, alignment: .any),
         let result = session.raycast(raycast).first {
             raycastHandler(result.worldTransform)
         }
+        #endif
+    }
+    
+    func registerGestureRecognizer() {
+        let gestureRecognoizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
+        scnView.addGestureRecognizer(gestureRecognoizer)
     }
 }
 
 extension SCNRenderedViewController: SCNNodeRendererDelegate {
     func renderer(_ renderer: SCNNodeRenderer, didMountNode node: SCNNode, for anchor: AnyAnchor) {
         print("Starting AR experience")
+        #if !targetEnvironment(simulator)
          if case .attached = state { return }
         if let anchorAttachable = anchor.anchor as? ARAnchorAttachable {
             if case .intitializing = state {
@@ -160,6 +186,9 @@ extension SCNRenderedViewController: SCNNodeRendererDelegate {
         if let raycastHandler = (anchor.anchor as? RaycastHandlingAnchor)?.raycast {
             self.raycastHandler = raycastHandler
         }
+        #else
+        scene.rootNode.addChildNode(node)
+        #endif
     }
     
     var pointOfView: SCNNode? {

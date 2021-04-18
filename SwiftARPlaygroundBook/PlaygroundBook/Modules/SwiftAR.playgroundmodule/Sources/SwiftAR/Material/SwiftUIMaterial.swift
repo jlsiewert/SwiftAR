@@ -10,7 +10,7 @@ import SwiftUI
 import SceneKit
 
 extension SCNMaterialProperty {
-    static func view<V: SwiftUI.View>(view: V, size: CGSize = CGSize(width: 200, height: 200)) -> Any {
+    static func view<V: SwiftUI.View>(view: V, size: CGSize = CGSize(width: 500, height: 500)) -> Any {
         #if targetEnvironment(simulator)
         return UIColor.lightGray
         #else

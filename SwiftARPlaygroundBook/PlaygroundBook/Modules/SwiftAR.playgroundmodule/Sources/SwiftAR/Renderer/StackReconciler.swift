@@ -256,7 +256,7 @@ class StackReconciler<R: Renderer> {
                 source: &compositeElement[keyPath: bodyKeypath]
             )
             
-//            compositeElement.transientSubscriptions = []
+            compositeElement.subscriptions = []
             for property in dynamicProps {
                 // Setup state/subscriptions
                 if property.type is ValueStorage.Type {

@@ -10,6 +10,7 @@ import SceneKit
 
 extension TransformModifier: NodeReflectableModifier {
     func apply<R: Renderer>(to node: SCNNode, with renderer: R?) {
+        guard node.simdTransform != transform else { return }
         node.simdTransform = transform
     }
     
