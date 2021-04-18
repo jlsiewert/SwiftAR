@@ -3,7 +3,7 @@
  
  `SwiftAR` allows you to build interactive
  experiences using the `@State`, `@Binding`, `@StateObject`
- `@ObservedObject` and `@EnvironmentPbject` modifiers.
+ `@ObservedObject` and `@EnvironmentObject` modifiers.
  
  In this example, we use the `World` anchor type
  that just starts a world tracking.

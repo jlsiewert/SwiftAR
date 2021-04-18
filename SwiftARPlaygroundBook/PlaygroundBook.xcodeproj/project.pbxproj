@@ -93,6 +93,8 @@
 		FDE77FAE262C3414008F3A34 /* PublicResources in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = FDE77FA8262C33FF008F3A34 /* PublicResources */; };
 		FDE77FB4262C6321008F3A34 /* LookAt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE77FB3262C6321008F3A34 /* LookAt.swift */; };
 		FDE77FB8262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE77FB7262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift */; };
+		FDE77FBC262C6F7F008F3A34 /* ObservedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE77FBB262C6F7F008F3A34 /* ObservedObject.swift */; };
+		FDE77FC0262C6FA6008F3A34 /* StateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE77FBF262C6FA6008F3A34 /* StateObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -272,6 +274,8 @@
 		FDE77FA8262C33FF008F3A34 /* PublicResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PublicResources; sourceTree = "<group>"; };
 		FDE77FB3262C6321008F3A34 /* LookAt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookAt.swift; sourceTree = "<group>"; };
 		FDE77FB7262C63CB008F3A34 /* LookAtModifier+NodeReflectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LookAtModifier+NodeReflectable.swift"; sourceTree = "<group>"; };
+		FDE77FBB262C6F7F008F3A34 /* ObservedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservedObject.swift; sourceTree = "<group>"; };
+		FDE77FBF262C6FA6008F3A34 /* StateObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -512,6 +516,8 @@
 		FDE1EBE9262A3B2D00380B34 /* State */ = {
 			isa = PBXGroup;
 			children = (
+				FDE77FBF262C6FA6008F3A34 /* StateObject.swift */,
+				FDE77FBB262C6F7F008F3A34 /* ObservedObject.swift */,
 				FDE1EBEA262A3B2D00380B34 /* Binding.swift */,
 				FDE1EBEB262A3B2D00380B34 /* State.swift */,
 				FDE1EBEC262A3B2D00380B34 /* ObservedProperty.swift */,
@@ -853,6 +859,7 @@
 				FDE1EC38262A3B2D00380B34 /* TransformModifier+NodeReflectible.swift in Sources */,
 				FDE1EC52262A3B2D00380B34 /* AnyModel.swift in Sources */,
 				FDE1EC63262A3B2D00380B34 /* WorldAnchor.swift in Sources */,
+				FDE77FC0262C6FA6008F3A34 /* StateObject.swift in Sources */,
 				FDE1EC33262A3B2D00380B34 /* AnyExperience.swift in Sources */,
 				FDE1EC6B262A3B2D00380B34 /* GettersSetters.swift in Sources */,
 				FDE1EC47262A3B2D00380B34 /* State+SwiftUI.swift in Sources */,
@@ -870,6 +877,7 @@
 				FDE1EC51262A3B2D00380B34 /* Sphere.swift in Sources */,
 				FDE1EC4A262A3B2D00380B34 /* simd+Extensions.swift in Sources */,
 				FDE1EC5A262A3B2D00380B34 /* Animation.swift in Sources */,
+				FDE77FBC262C6F7F008F3A34 /* ObservedObject.swift in Sources */,
 				FDE1EC39262A3B2D00380B34 /* TappableNode.swift in Sources */,
 				FDE1EC56262A3B2D00380B34 /* TupelModel.swift in Sources */,
 				FDE1EC78262A3B2D00380B34 /* StructMetadata.swift in Sources */,

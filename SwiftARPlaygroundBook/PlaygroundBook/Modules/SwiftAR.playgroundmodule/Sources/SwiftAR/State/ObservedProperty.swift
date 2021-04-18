@@ -26,11 +26,11 @@ protocol ObservedProperty: DynamicProperty {
 }
 
 
-protocol AnyObservedProperty: ObservedProperty {
+protocol AnyObservedProperty {
     var anyObjectWillChange: AnyPublisher<Void, Never> { get }
 }
 
-extension AnyObservedProperty {
+extension AnyObservedProperty where Self: ObservedProperty {
     var anyObjectWillChange: AnyPublisher<Void, Never> {
         objectWillChange.map({ _ in () }).eraseToAnyPublisher()
     }

@@ -219,6 +219,27 @@ class StackReconciler<R: Renderer> {
         }
     }
     
+    private func setupTransientSubscription(
+        for property: PropertyInfo,
+        of compositeElement: MountedElement<R>,
+        body bodyKeypath: KeyPath<MountedElement<R>, Any>
+    ) {
+        // `ObservedProperty` property already filtered out, so safe to assume the value's type
+        // swiftlint:disable force_cast
+        let observed = property.get(
+            from: compositeElement[keyPath: bodyKeypath]
+        ) as! AnyObservedProperty
+        // swiftlint:enable force_cast
+        
+        // break the reference cycle here as subscriptions are stored in the `compositeElement`
+        // instance property
+        observed.anyObjectWillChange.sink { [weak self, weak compositeElement] _ in
+            if let compositeElement = compositeElement {
+                self?.queueUpdate(for: compositeElement)
+            }
+        }.store(in: &compositeElement.subscriptions)
+    }
+    
     /// Applies State, Environment etc to the body and updates the body
     /// of the elment.
     /// - Returns: The type erased but applied body ( `AnyExperience`, `AnyAnchor`, `AnyModel`)
@@ -242,9 +263,9 @@ class StackReconciler<R: Renderer> {
                     setupStorage(id: stateIdx, for: property, of: compositeElement, body: bodyKeypath)
                     stateIdx += 1
                 }
-//                if property.type is ObservedProperty.Type {
-//                    setupTransientSubscription(for: property, of: compositeElement, body: bodyKeypath)
-//                }
+                if property.type is AnyObservedProperty.Type {
+                    setupTransientSubscription(for: property, of: compositeElement, body: bodyKeypath)
+                }
             }
         }
         

@@ -7,6 +7,7 @@
 //  Based on the implementation of Tokamak
 
 import Foundation
+import Combine
 
 class MountedElement<R: Renderer>: Hashable {
     // MARK: - Initialization
@@ -318,6 +319,8 @@ class MountedElement<R: Renderer>: Hashable {
     // MARK: Storage
     /// A type erased storage for `@State` values
     var store: [Any] = []
+    /// A store for all subscriptions
+    var subscriptions: [AnyCancellable] = []
     var environmentValues: EnvironmentValues
 
     func updateEnvironment() {
