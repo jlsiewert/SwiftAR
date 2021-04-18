@@ -21,7 +21,12 @@ extension Material {
         let m = SCNMaterial()
         m.diffuse.contents = materialProperty
         m.diffuse.intensity = 1
-        m.lightingModel = .physicallyBased
+        switch self {
+            case ._swiftUIview:
+                m.lightingModel = .constant
+            default:
+            m.lightingModel = .physicallyBased
+        }
         return m
     }
     
