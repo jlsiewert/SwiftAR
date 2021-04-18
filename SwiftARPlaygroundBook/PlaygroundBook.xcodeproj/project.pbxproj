@@ -90,6 +90,8 @@
 		FDE1EC78262A3B2D00380B34 /* StructMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EC2F262A3B2D00380B34 /* StructMetadata.swift */; };
 		FDE1EC79262A3B2D00380B34 /* MetadataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EC30262A3B2D00380B34 /* MetadataState.swift */; };
 		FDE1EC7A262A3B2D00380B34 /* typeConstructorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EC31262A3B2D00380B34 /* typeConstructorName.swift */; };
+		FDE77FA9262C33FF008F3A34 /* PublicResources in Resources */ = {isa = PBXBuildFile; fileRef = FDE77FA8262C33FF008F3A34 /* PublicResources */; };
+		FDE77FAE262C3414008F3A34 /* PublicResources in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = FDE77FA8262C33FF008F3A34 /* PublicResources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -139,6 +141,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)";
 			dstSubfolderSpec = 16;
 			files = (
+				FDE77FAE262C3414008F3A34 /* PublicResources in Copy Book Contents */,
 				5E086DD32051E3A3004D8D25 /* Manifest.plist in Copy Book Contents */,
 				5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */,
 				5E70679F23678DC30094BDEF /* Modules in Copy Book Contents */,
@@ -266,6 +269,7 @@
 		FDE1EC2F262A3B2D00380B34 /* StructMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StructMetadata.swift; sourceTree = "<group>"; };
 		FDE1EC30262A3B2D00380B34 /* MetadataState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataState.swift; sourceTree = "<group>"; };
 		FDE1EC31262A3B2D00380B34 /* typeConstructorName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = typeConstructorName.swift; sourceTree = "<group>"; };
+		FDE77FA8262C33FF008F3A34 /* PublicResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PublicResources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -302,6 +306,7 @@
 				5E086DCF2051DF0F004D8D25 /* Manifest.plist */,
 				5E70679B23678D810094BDEF /* Modules */,
 				5EF2F9792054B64800191409 /* PrivateResources */,
+				FDE77FA8262C33FF008F3A34 /* PublicResources */,
 				5EF2F9B62054E6F900191409 /* Chapters */,
 				5EF2F9A42054BB9500191409 /* Supporting Content */,
 			);
@@ -791,6 +796,7 @@
 			files = (
 				5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */,
 				5E551EC52371FC3F00784365 /* Assets.xcassets in Resources */,
+				FDE77FA9262C33FF008F3A34 /* PublicResources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

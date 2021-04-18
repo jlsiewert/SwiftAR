@@ -26,5 +26,7 @@
 	<string>Disabled</string>
 	<key>SupportsDarkMode</key>
 	<true/>
+	<key>ImageReference</key>
+	<string>SwiftAR.png</string>
 </dict>
 </plist>
