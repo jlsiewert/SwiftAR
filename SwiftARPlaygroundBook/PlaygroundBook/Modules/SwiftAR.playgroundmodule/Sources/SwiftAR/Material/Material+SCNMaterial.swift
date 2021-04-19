@@ -17,26 +17,33 @@ extension Material {
         }
     }
     
-    func createMaterial() -> SCNMaterial {
+    func apply(to geometry: SCNGeometry) {
+            geometry.materials = [self.createMaterial()]
+    }
+    
+    private func createMaterial() -> SCNMaterial {
         let m = SCNMaterial()
-        m.diffuse.contents = materialProperty
+        DispatchQueue.global(qos: .userInitiated).async {
+            m.diffuse.contents = materialProperty
+        }
         m.diffuse.intensity = 1
         switch self {
             case ._swiftUIview:
                 m.lightingModel = .constant
             default:
-            m.lightingModel = .physicallyBased
+                m.lightingModel = .physicallyBased
         }
         return m
     }
     
     func update(material: SCNMaterial) {
-        switch self {
-            case ._swiftUIview:
-                return
-            default:
-                break
-        }
+            switch self {
+                case ._swiftUIview:
+                    return
+                default:
+                    break
+            }
         material.diffuse.contents = materialProperty
+        
     }
 }

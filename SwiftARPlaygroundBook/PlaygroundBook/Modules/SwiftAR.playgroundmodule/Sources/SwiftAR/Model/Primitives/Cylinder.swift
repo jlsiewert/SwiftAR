@@ -13,6 +13,7 @@ public struct Cylinder: Model {
     let height: CGFloat
     
     @Environment(\.material) var material: Material
+    @Environment(\.reducedVertexCount) var reducedVertexCount
     
     public init(radius: Float = 0.1, height: Float = 0.2) {
         self.radius = CGFloat(radius)
@@ -24,7 +25,9 @@ extension Cylinder: PrimitiveModel { }
 extension Cylinder: NodeReflectable {
     func create() -> SCNNode {
         let c = SCNCylinder(radius: radius, height: height)
-        c.materials = [material.createMaterial()]
+        c.heightSegmentCount = 1
+        c.radialSegmentCount = reducedVertexCount ? 24 : 48
+        material.apply(to: c)
         return SCNNode(geometry: c)
     }
     
@@ -34,6 +37,7 @@ extension Cylinder: NodeReflectable {
         }
         c.radius = radius
         c.height = height
+        c.radialSegmentCount = reducedVertexCount ? 24 : 48
         c.materials.first.map(material.update(material:))
     }
     

@@ -1,16 +1,14 @@
-/*:
- # A Model of our Solar System
- 
- This last page showcases the interface to
- `SwiftUI` to create a model of our solar system.
- 
- Tap on a planet to view it in the size relative to
- our sun and get some more details.
-  
- */
+//
+//  SolarCardSystemExperience.swift
+//  LiveViewTestApp
+//
+//  Created by Jan Luca Siewert on 19.04.21.
+//
 
+import Foundation
 import SwiftAR
 import SwiftUI
+
 
 typealias Anchor = SwiftAR.Anchor
 typealias Group = SwiftAR.Group
@@ -22,7 +20,7 @@ struct Planet: Hashable {
     let daysPerYear: Double?
     let distanceToSun: Double?
     
-    // I know, I know, the sun is a star
+    // I know, I know
     static var sun = Planet(image: #imageLiteral(resourceName: "sun.jpg"), name: "Sun", diameter: 1_392_684, daysPerYear: nil, distanceToSun: nil)
     static var mercury = Planet(image: #imageLiteral(resourceName: "mercury.jpg"), name: "Mercury", diameter: 4_879.4, daysPerYear: 88, distanceToSun: 57_909_00)
     static var venus = Planet(image: #imageLiteral(resourceName: "venus.jpg"), name: "Venus", diameter: 12_103.6, daysPerYear: 225, distanceToSun: 108_160_000)
@@ -83,7 +81,6 @@ struct PlanetInformation: View {
             HStack(spacing: 12) {
                 Text(name)
                     .font(.largeTitle).bold()
-                    .layoutPriority(1)
                 Spacer()
                 Image(uiImage: image)
                     .resizable()
@@ -172,12 +169,9 @@ struct SolarSystemExperience: Experience {
         Surface(.horizontal) {
             ForEach(0..<planetCount) { i in
                 PlanetInformationModel(planet: Planet.allPlanets[i], radius: radius)
+                    .environment(\.reducedVertexCount, true)
                     .translate(x: 2.5 * radius * (Float(i) - Float( planetCount ) / Float(2) ))
             }
         }
     }
 }
-
-SolarSystemExperience.liveView()
-
-

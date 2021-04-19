@@ -12,9 +12,6 @@
 		5E70679F23678DC30094BDEF /* Modules in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5E70679E23678DC00094BDEF /* Modules */; };
 		5EA2E3C02056F35A00416A35 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA2E3BF2056F35A00416A35 /* AppDelegate.swift */; };
 		5EA2E3CA2056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EA2E3C82056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard */; };
-		5EA2E3DA2056F8D100416A35 /* PlaygroundBluetooth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5EA2E3D82056F88700416A35 /* PlaygroundBluetooth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5EA2E3DB2056F8D100416A35 /* PlaygroundSupport.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5EA2E3D72056F88700416A35 /* PlaygroundSupport.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5EBEC2F0205B399300975D3F /* LiveViewHost.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5EBEC2EF205B396500975D3F /* LiveViewHost.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EF2F97E2054B6E400191409 /* ManifestPlist.strings */; };
 		5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9B62054E6F900191409 /* Chapters */; };
 		FDDF3B34262CAD6100CC4A53 /* OptionalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDF3B33262CAD6100CC4A53 /* OptionalModel.swift */; };
@@ -98,7 +95,10 @@
 		FDE782FC262C945D008F3A34 /* MetadataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EC30262A3B2D00380B34 /* MetadataState.swift */; };
 		FDE782FD262C945D008F3A34 /* typeConstructorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1EC31262A3B2D00380B34 /* typeConstructorName.swift */; };
 		FDE78302262C9469008F3A34 /* libSwiftAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDE782A7262C944F008F3A34 /* libSwiftAR.a */; };
-		FDE78314262C94F2008F3A34 /* SolarSystemExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE78313262C94F2008F3A34 /* SolarSystemExperience.swift */; };
+		FDF0B5CC262DD16000EC4CE2 /* OnAppear.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0B5CB262DD16000EC4CE2 /* OnAppear.swift */; };
+		FDF327E2262DA7F4007439A6 /* LiveViewHost.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5EBEC2EF205B396500975D3F /* LiveViewHost.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FDF327E4262DAD03007439A6 /* SolarCardSystemExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF327E3262DAD03007439A6 /* SolarCardSystemExperience.swift */; };
+		FDF327E6262DADB2007439A6 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FDF327E5262DADB2007439A6 /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -118,14 +118,7 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		5EA2E3CF2056F36100416A35 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5E2A7ADD204F611300F4E17A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5E086DBF2051C5A7004D8D25;
-			remoteInfo = PlaygroundBook;
-		};
-		FDE78300262C9464008F3A34 /* PBXContainerItemProxy */ = {
+		FDF327E0262DA702007439A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E2A7ADD204F611300F4E17A /* Project object */;
 			proxyType = 1;
@@ -155,9 +148,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5EBEC2F0205B399300975D3F /* LiveViewHost.framework in Embed Frameworks */,
-				5EA2E3DA2056F8D100416A35 /* PlaygroundBluetooth.framework in Embed Frameworks */,
-				5EA2E3DB2056F8D100416A35 /* PlaygroundSupport.framework in Embed Frameworks */,
+				FDF327E2262DA7F4007439A6 /* LiveViewHost.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +271,9 @@
 		FDE78236262C938E008F3A34 /* x86_64-apple-ios-simulator.swiftmodule */ = {isa = PBXFileReference; lastKnownFileType = file; name = "x86_64-apple-ios-simulator.swiftmodule"; path = "../../../../../Library/Developer/Xcode/DerivedData/SwiftAR-bncgzcdylaqqdweithuuibfdebnz/Build/Products/Debug-iphonesimulator/LiveViewTestApp.swiftmodule/x86_64-apple-ios-simulator.swiftmodule"; sourceTree = "<group>"; };
 		FDE782A7262C944F008F3A34 /* libSwiftAR.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSwiftAR.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDE78313262C94F2008F3A34 /* SolarSystemExperience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemExperience.swift; sourceTree = "<group>"; };
+		FDF0B5CB262DD16000EC4CE2 /* OnAppear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnAppear.swift; sourceTree = "<group>"; };
+		FDF327E3262DAD03007439A6 /* SolarCardSystemExperience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarCardSystemExperience.swift; sourceTree = "<group>"; };
+		FDF327E5262DADB2007439A6 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -390,6 +384,8 @@
 				5E80DF292342971E00595EB4 /* LiveViewTestApp.entitlements */,
 				5EA2E3CB2056F35B00416A35 /* Info.plist */,
 				FDE78313262C94F2008F3A34 /* SolarSystemExperience.swift */,
+				FDF327E3262DAD03007439A6 /* SolarCardSystemExperience.swift */,
+				FDF327E5262DADB2007439A6 /* Media.xcassets */,
 			);
 			path = LiveViewTestApp;
 			sourceTree = "<group>";
@@ -604,6 +600,7 @@
 				FDE1EC07262A3B2D00380B34 /* OnUpdate.swift */,
 				FDE1EC08262A3B2D00380B34 /* Animation.swift */,
 				FDE1EC09262A3B2D00380B34 /* OnTapModel.swift */,
+				FDF0B5CB262DD16000EC4CE2 /* OnAppear.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -751,8 +748,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				FDE78301262C9464008F3A34 /* PBXTargetDependency */,
-				5EA2E3D02056F36100416A35 /* PBXTargetDependency */,
+				FDF327E1262DA702007439A6 /* PBXTargetDependency */,
 			);
 			name = LiveViewTestApp;
 			productName = LiveViewTestApp;
@@ -832,6 +828,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDF327E6262DADB2007439A6 /* Media.xcassets in Resources */,
 				5EA2E3CA2056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -862,8 +859,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FDE78314262C94F2008F3A34 /* SolarSystemExperience.swift in Sources */,
 				5EA2E3C02056F35A00416A35 /* AppDelegate.swift in Sources */,
+				FDF327E4262DAD03007439A6 /* SolarCardSystemExperience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -911,6 +908,7 @@
 				FDE782D7262C945D008F3A34 /* Plane.swift in Sources */,
 				FDE782D8262C945D008F3A34 /* Group.swift in Sources */,
 				FDE782D9262C945D008F3A34 /* TupelModel.swift in Sources */,
+				FDF0B5CC262DD16000EC4CE2 /* OnAppear.swift in Sources */,
 				FDE782DA262C945D008F3A34 /* ForEach.swift in Sources */,
 				FDDF3B34262CAD6100CC4A53 /* OptionalModel.swift in Sources */,
 				FDE782DB262C945D008F3A34 /* ModelBuilder.swift in Sources */,
@@ -955,15 +953,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5EA2E3D02056F36100416A35 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5E086DBF2051C5A7004D8D25 /* PlaygroundBook */;
-			targetProxy = 5EA2E3CF2056F36100416A35 /* PBXContainerItemProxy */;
-		};
-		FDE78301262C9464008F3A34 /* PBXTargetDependency */ = {
+		FDF327E1262DA702007439A6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FDE782A6262C944F008F3A34 /* SwiftAR */;
-			targetProxy = FDE78300262C9464008F3A34 /* PBXContainerItemProxy */;
+			targetProxy = FDF327E0262DA702007439A6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1145,7 +1138,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = 3JHX23SKBN;
+				DEVELOPMENT_TEAM = H663T9FNDN;
 				GCC_DYNAMIC_NO_PIC = NO;
 				INFOPLIST_FILE = LiveViewTestApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
@@ -1154,12 +1147,12 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = "-all_load";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER_PREFIX).LiveViewTestApp";
+				PRODUCT_BUNDLE_IDENTIFIER = de.rub.lde.example.liveview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "LIVE_VIEW_TEST_APP DEBUG";
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
 					"\"$(OTHER_FRAMEWORKS_DIR)\"",
 					"$(inherited)",
@@ -1176,7 +1169,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = 3JHX23SKBN;
+				DEVELOPMENT_TEAM = H663T9FNDN;
 				INFOPLIST_FILE = LiveViewTestApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1184,11 +1177,12 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = "-all_load";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER_PREFIX).LiveViewTestApp";
+				PRODUCT_BUNDLE_IDENTIFIER = de.rub.lde.example.liveview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = LIVE_VIEW_TEST_APP;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
 					"\"$(OTHER_FRAMEWORKS_DIR)\"",
 					"$(inherited)",

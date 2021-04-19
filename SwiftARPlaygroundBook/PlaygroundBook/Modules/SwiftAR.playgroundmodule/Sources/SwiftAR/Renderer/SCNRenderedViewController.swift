@@ -7,7 +7,8 @@
 
 import Foundation
 import ARKit
-#if canImport(PlaygroundSupport)
+#if swift(>=5.4)
+#elseif canImport(PlaygroundSupport)
 import PlaygroundSupport
 #endif
 
@@ -86,7 +87,8 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        #if canImport(PlaygroundSupport)
+        #if swift(>=5.4)
+        #elseif canImport(PlaygroundSupport)
         view.frame = self.liveViewSafeAreaGuide.layoutFrame        
         #endif
         scnView.frame = view.frame
@@ -127,6 +129,10 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
         #endif
         
         renderer = SCNNodeRenderer(root: experienceNode, experience: experience, delegate: self)
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
@@ -197,6 +203,7 @@ extension SCNRenderedViewController: SCNNodeRendererDelegate {
 }
 
 
-#if canImport(PlaygroundSupport)
+#if swift(>=5.4)
+#elseif canImport(PlaygroundSupport)
 extension SCNRenderedViewController: PlaygroundLiveViewSafeAreaContainer { }
 #endif

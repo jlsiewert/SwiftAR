@@ -215,7 +215,7 @@ struct Neptune: Model {
 }
 
 struct SolarSystemExperience: Experience {
-//    @State var controller = UniverseController(distanceToRadiusFactor: 100)
+    @State var controller = UniverseController()
     var body: some Anchor {
         World {
             Group {
@@ -230,7 +230,7 @@ struct SolarSystemExperience: Experience {
                 Neptune()
             }
             .translate(z: -5)
-//            .environmentObject(controller)
+            .environmentObject(controller)
         }
     }
 }

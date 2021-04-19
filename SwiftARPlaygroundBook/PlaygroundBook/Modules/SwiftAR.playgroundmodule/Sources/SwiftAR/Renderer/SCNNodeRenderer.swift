@@ -38,6 +38,7 @@ final class SCNNodeRenderer: Renderer {
     }
     
     func mount(_ element: MountedElement<SCNNodeRenderer>, to parent: SCNNode?, whileApplyingOptional modifier: Any?) -> SCNNode {
+        autoreleasepool {
         print("Mount \(element._type)")
         switch element.mounted {
             case .experience:
@@ -79,6 +80,7 @@ final class SCNNodeRenderer: Renderer {
                 }
                 
                 return node
+        }
         }
     }
     

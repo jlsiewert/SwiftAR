@@ -14,7 +14,8 @@ public protocol Experience {
     init()
 }
 
-#if canImport(PlaygroundSupport)
+#if swift(>=5.4)
+#elseif canImport(PlaygroundSupport)
 import PlaygroundSupport
 
 extension Experience {

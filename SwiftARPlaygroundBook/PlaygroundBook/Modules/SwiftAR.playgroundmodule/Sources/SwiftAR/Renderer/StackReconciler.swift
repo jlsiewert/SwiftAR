@@ -59,7 +59,9 @@ class StackReconciler<R: Renderer> {
         self.queuedRenders.removeAll()
         
         for mountedElement in queuedRenders {
+            autoreleasepool {
             mountedElement.update(with: self)
+            }
         }
     }
     
@@ -147,6 +149,11 @@ class StackReconciler<R: Renderer> {
                 } else {
                     result = renderer.mount(element, to: parent)
                 }
+                
+                if let onAppear = element.model.model as? OnAppearElement {
+                    onAppear.onAppear()
+                }
+                
             case .anchor:
                 guard let parent = parent else {
                     fatalError("Call to render before parent was mounted!")
@@ -157,6 +164,7 @@ class StackReconciler<R: Renderer> {
         guard let r = result else {
             fatalError("Not handled!")
         }
+    
         return r
     }
     
@@ -167,8 +175,11 @@ class StackReconciler<R: Renderer> {
                 fatalError("Experiences can't be unmounted")
             case .anchor:
                 fatalError("Anchors can't be unomunted")
-            case .model:
+            case .model(let model):
                 renderer.unmount(element)
+                if let disappear = model.model as? OnAppearElement {
+                    disappear.onDisappear()
+                }
         }
     }
     
