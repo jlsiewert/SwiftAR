@@ -2,15 +2,15 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/janluca/Documents/dev/Privat/SwiftAR/SwiftAR.playgroundbook/Readme.md">
+      location = "group:LICENSE">
+   </FileRef>
+   <FileRef
+      location = "group:Readme.md">
    </FileRef>
    <FileRef
       location = "container:SwiftARPlaygroundBook/PlaygroundBook.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:SwiftAR.playgroundbook">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/janluca/Documents/dev/Privat/SwiftAR/SwiftAR.playgroundbook/LICENSE">
    </FileRef>
 </Workspace>
