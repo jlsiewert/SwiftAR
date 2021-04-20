@@ -1,5 +1,7 @@
 #  SwiftAR
 
+![SwiftAR Logo](SwiftARPlaygroundBook/PlaygroundBook/PublicResources/SwiftAR.png)
+
 `SwiftAR` is a declerative framework to build AR experiences, with a `SwiftUI` inspired design.
 
 It builds on the base types `Experience`, `Anchor` and `Model` to compose AR scenes.
