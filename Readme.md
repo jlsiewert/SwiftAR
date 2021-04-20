@@ -1,6 +1,6 @@
 #  SwiftAR
 
-![SwiftAR Logo](SwiftARPlaygroundBook/PlaygroundBook/PublicResources/SwiftAR.png)
+![SwiftAR Logo](doc/Header.png)
 
 `SwiftAR` is a declerative framework to build AR experiences, with a `SwiftUI` inspired design.
 
