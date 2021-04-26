@@ -30,7 +30,7 @@ public struct StateObject<ObjectType: ObservableObject>: DynamicProperty {
   }
 }
 
-extension StateObject: ObservedProperty {
+extension StateObject: AnyObservedProperty, ObservedProperty {
   var objectWillChange: AnyPublisher<(), Never> {
     wrappedValue.objectWillChange.map { _ in }.eraseToAnyPublisher()
   }

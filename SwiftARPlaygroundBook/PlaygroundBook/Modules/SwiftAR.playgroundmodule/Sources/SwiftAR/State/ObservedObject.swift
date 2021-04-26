@@ -42,7 +42,7 @@ public struct ObservedObject<ObjectType>: DynamicProperty where ObjectType: Obse
   public let projectedValue: Wrapper
 }
 
-extension ObservedObject: ObservedProperty {
+extension ObservedObject: AnyObservedProperty, ObservedProperty {
   var objectWillChange: AnyPublisher<(), Never> {
     wrappedValue.objectWillChange.map { _ in }.eraseToAnyPublisher()
   }
