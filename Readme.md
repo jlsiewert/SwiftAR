@@ -3,7 +3,7 @@
 ![SwiftAR Logo](docs/images/Header.png)
 
 `SwiftAR` is a declerative framework to build AR experiences, with a `SwiftUI` inspired design.
-You can read the [documention](https://jlsiewert.github.io/SwiftAR/) to learn more.
+You can read the [documention](https://jlsiewert.github.io/SwiftAR/documentation/swiftar/) to learn more.
 
 It builds on the base types `Experience`, `Anchor` and `Model` to compose AR scenes.
 It has support for primitve models, materials and textures (even `SwiftUI` views can be assigned
