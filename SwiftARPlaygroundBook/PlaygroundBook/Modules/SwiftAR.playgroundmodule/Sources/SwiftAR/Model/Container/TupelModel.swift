@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A `TupelModel` combines children while preserving their type information.
 public struct TupelModel: Model {
     let children: [AnyModel]
     

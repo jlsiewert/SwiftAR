@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A model without any content.
 public struct EmptyModel: PrimitiveModel {
     public init() { }
 }

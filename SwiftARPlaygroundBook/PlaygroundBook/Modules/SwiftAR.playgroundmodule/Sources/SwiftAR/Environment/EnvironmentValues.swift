@@ -14,6 +14,24 @@
 
 import Combine
 
+/**
+ Use `EnvironmentValues` together with ``EnvironmentKey`` to create
+ custom values to pass down the model hierachy.
+ 
+ ```swift
+ public struct ReduceVertexCountKey: EnvironmentKey {
+     /// By default, no reduction in rendering quality should take place.
+     public static var defaultValue: Bool = false
+ }
+
+ public extension EnvironmentValues {
+     var reducedVertexCount: Bool {
+         get { self[ReduceVertexCountKey.self] }
+         set { self[ReduceVertexCountKey.self] = newValue }
+     }
+ }
+ ```
+ */
 public struct EnvironmentValues {
   private var values: [ObjectIdentifier: Any] = [:]
 

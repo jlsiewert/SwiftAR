@@ -7,9 +7,28 @@
 
 import Foundation
 
+/**
+ An ``Anchor`` that recognizes a Surface, like a wall or a table.
+ 
+ ```swift
+ struct SolarSystemExperience: Experience {
+     var body: some Anchor {
+         Surface(.horizontal) {
+            Sphere(radius: 1)
+        }
+    }
+ }
+ ```
+ */
 public struct Surface<M: Model>: Anchor {
+    /// The description for the specific surface type the model should be anchored at
     public enum SurfaceType {
-        case horizontal, vertical, any
+        /// A horizontal plane, like a table or the floor
+        case horizontal
+        /// A vertical plane, like a wall
+        case vertical
+        /// Any surface
+        case any
     }
     
     let model: () -> M

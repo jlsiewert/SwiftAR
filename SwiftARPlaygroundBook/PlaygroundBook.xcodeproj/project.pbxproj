@@ -14,6 +14,7 @@
 		5EA2E3CA2056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EA2E3C82056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard */; };
 		5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EF2F97E2054B6E400191409 /* ManifestPlist.strings */; };
 		5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9B62054E6F900191409 /* Chapters */; };
+		FDC9F48F27B0108D001BF68A /* SwiftAR.docc in Sources */ = {isa = PBXBuildFile; fileRef = FDC9F48E27B0108D001BF68A /* SwiftAR.docc */; };
 		FDDF3B34262CAD6100CC4A53 /* OptionalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDF3B33262CAD6100CC4A53 /* OptionalModel.swift */; };
 		FDDF3B38262CAE6A00CC4A53 /* ConditionalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDF3B37262CAE6A00CC4A53 /* ConditionalModel.swift */; };
 		FDE77FA9262C33FF008F3A34 /* PublicResources in Resources */ = {isa = PBXBuildFile; fileRef = FDE77FA8262C33FF008F3A34 /* PublicResources */; };
@@ -186,6 +187,7 @@
 		5EBEC2EF205B396500975D3F /* LiveViewHost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LiveViewHost.framework; sourceTree = OTHER_FRAMEWORKS_DIR; };
 		5EF2F97D2054B6E400191409 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ManifestPlist.strings; sourceTree = "<group>"; };
 		5EF2F9B62054E6F900191409 /* Chapters */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Chapters; sourceTree = "<group>"; };
+		FDC9F48E27B0108D001BF68A /* SwiftAR.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = SwiftAR.docc; sourceTree = "<group>"; };
 		FDDF3B33262CAD6100CC4A53 /* OptionalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalModel.swift; sourceTree = "<group>"; };
 		FDDF3B37262CAE6A00CC4A53 /* ConditionalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalModel.swift; sourceTree = "<group>"; };
 		FDE1EBD5262A3B2D00380B34 /* Experience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Experience.swift; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 		FDE1EBD3262A3B2D00380B34 /* SwiftAR */ = {
 			isa = PBXGroup;
 			children = (
+				FDC9F48E27B0108D001BF68A /* SwiftAR.docc */,
 				FDE1EBD4262A3B2D00380B34 /* Experience */,
 				FDE1EBD7262A3B2D00380B34 /* Renderer */,
 				FDE1EBE4262A3B2D00380B34 /* Modifier */,
@@ -919,6 +922,7 @@
 				FDE782E0262C945D008F3A34 /* EnvironmentValues.swift in Sources */,
 				FDDF3B38262CAE6A00CC4A53 /* ConditionalModel.swift in Sources */,
 				FDE782E1262C945D008F3A34 /* EnvironmentObject.swift in Sources */,
+				FDC9F48F27B0108D001BF68A /* SwiftAR.docc in Sources */,
 				FDE782E2262C945D008F3A34 /* EnvironmentKey.swift in Sources */,
 				FDE782E3262C945D008F3A34 /* SurfaceAnchor.swift in Sources */,
 				FDE782E4262C945D008F3A34 /* Anchor.swift in Sources */,

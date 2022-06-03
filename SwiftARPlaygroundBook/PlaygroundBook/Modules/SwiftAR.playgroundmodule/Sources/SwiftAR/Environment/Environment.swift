@@ -23,6 +23,20 @@ protocol EnvironmentReader {
   mutating func setContent(from values: EnvironmentValues)
 }
 
+/// Use the `@Environment` property wrapper to pass down data deeper into the model hierachy.
+/// You use ``EnvironmentKey`` to define new values. ``EnvironmentValues`` is a list of pre-defined
+/// environment values.
+///
+///
+/// ```swift
+/// struct ReducedVertexSphere: Model {
+///     var body: some Model {
+///         Sphere(radius: 1)
+///             .environment(\.reducedVertexCount, true)
+///     }
+/// }
+///
+/// ```
 @propertyWrapper public struct Environment<Value> {
   enum Content {
     case keyPath(KeyPath<EnvironmentValues, Value>)

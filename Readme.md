@@ -1,6 +1,6 @@
 #  SwiftAR
 
-![SwiftAR Logo](doc/Header.png)
+![SwiftAR Logo](doc/images/Header.png)
 
 `SwiftAR` is a declerative framework to build AR experiences, with a `SwiftUI` inspired design.
 
@@ -15,6 +15,10 @@ Similarly, the `World` anchor class supports raycasting through the `onTap` modi
 
 The projects supports result builders `ModelModifiers` and collections with `ForEach`
 as well as `@Environment`
+
+## Examples
+
+## API Description
 
 ## Acknowlegments
 

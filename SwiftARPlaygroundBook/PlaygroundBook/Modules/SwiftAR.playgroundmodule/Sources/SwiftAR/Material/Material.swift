@@ -9,11 +9,17 @@ import Foundation
 import UIKit
 import SwiftUI
 
+/// The material that is used for the ``Model``.
+///
+/// Use the ``Model/material(_:)-3ah50`` method to add a material to the model.
 public enum Material: Equatable {
+    /// Use a ``UIKit/UIColor``
     case color(UIColor)
+    /// Use an ``UIKit/UIImage`` as a texture
     case texture(UIImage)
     case _swiftUIview(SwiftUI.AnyView)
     
+    /// Use an interactive ``SwiftUI/View`` as a texture
     public static func view<V: View>(_ view: V) -> Material {
         ._swiftUIview(AnyView(erasing: view))
     }

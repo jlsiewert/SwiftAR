@@ -17,7 +17,39 @@
 
 typealias Updater<T> = (inout T) -> ()
 
-/** Note that `set` functions are not `mutating`, they never update the
+/**
+ Use a `Binding` when you want pass a mutable reference to a source of
+ truth managed.
+ 
+ A `Binding` gets created from a ``State`` using the `$` prefix shorthand.
+ 
+ ```swift
+ // A model that changes its color based on a Binding<Bool>
+ struct ColorChangingModel: Model {
+    @Binding tapped: Bool
+
+    var body: some Model {
+        Sphere()
+            .material(.color( tapped ? .red : .blue ))
+            .onTap {
+                // Even though the model defines no source of truth,
+                // the binding provides a mutable reference to one.
+                tapped.toggle()
+            }
+    }
+ }
+ 
+ struct MyModel: Model {
+    @State state = true
+ 
+    var body: some Model {
+        ColorChangingModel($state) // Create a Binding using the $ shorthand from a State
+            .scale(state ? 1 : 0.5 )
+    }
+ }
+ ```
+ 
+ Note that `set` functions are not `mutating`, they never update the
  view's state in-place synchronously, but only schedule an update with
  the renderer at a later time.
  */
@@ -30,13 +62,16 @@ typealias Updater<T> = (inout T) -> ()
   private let get: () -> Value
   private let set: (Value) -> ()
 
+  /// Retruns a `Binding` for the value
   public var projectedValue: Binding<Value> { self }
 
+  /// Create a new Binding from a specific getter and setter.
   public init(get: @escaping () -> Value, set: @escaping (Value) -> ()) {
     self.get = get
     self.set = set
   }
 
+  /// Use a keypath to create a nested Binding
   public subscript<Subject>(
     dynamicMember keyPath: WritableKeyPath<Value, Subject>
   ) -> Binding<Subject> {
@@ -49,6 +84,9 @@ typealias Updater<T> = (inout T) -> ()
     )
   }
 
+  /// Create a Binding for a constant value.
+  ///
+  /// Attempting to mutate a constant binding has no effect.
   public static func constant(_ value: Value) -> Self {
     .init(get: { value }, set: { _ in })
   }

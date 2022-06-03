@@ -30,6 +30,10 @@ public struct AnimatedModel<Body: Model>: Model {
 }
 
 public extension Model {
+    
+    /// Add an animation to the model
+    /// - Parameter type: The timing mode of the animation
+    /// - Returns: A modified model that applies animation to state changes.
     func animation(_ type: AnimatedModel<Self>.AnimationType? = .easeInOut) -> some Model {
         AnimatedModel(type, body: self)
     }

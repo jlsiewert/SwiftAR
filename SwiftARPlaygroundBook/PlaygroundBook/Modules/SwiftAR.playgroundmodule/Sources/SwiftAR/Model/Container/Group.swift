@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// Use a `Group` to combine multiple models together.
+///
+/// A `Group` does not have an effect on the rendering hierachy,
+/// alghough modifiers applied to the group are applied to all its children.
 public struct Group<Content: Model>: Model {
     let content: Content
     public init(@ModelBuilder content: () -> Content) {

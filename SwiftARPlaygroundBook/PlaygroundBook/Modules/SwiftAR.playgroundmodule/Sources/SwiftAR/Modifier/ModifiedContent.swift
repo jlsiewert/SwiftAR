@@ -11,6 +11,7 @@ protocol ModifierContainer {
     var environmentModifier: EnvironmentModifier? { get }
 }
 
+/// Create a Model with a specific ``ModelModifier`` applied.
 public struct ModifiedContent<Content: Model, Modifier: ModelModifier>: PrimitiveModel {
     @Environment(\.self) var environment
     

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Use the `EnvironmentKey` together with ``EnvironmentValues`` to define custom keys to pass down the hierachy.
 public protocol EnvironmentKey {
   associatedtype Value
   static var defaultValue: Value { get }

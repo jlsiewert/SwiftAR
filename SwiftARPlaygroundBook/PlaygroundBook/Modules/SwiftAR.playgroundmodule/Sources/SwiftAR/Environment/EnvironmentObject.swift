@@ -17,6 +17,35 @@
 
 import Combine
 
+/// Use the `@EnvironmentObject` model modifier to pass down ``Combine.ObservableObject`` objects
+/// down the model hierachy.
+///
+/// The renderer produces a runtime error when accessing an `EnvironmentObject` that was not passed down the hierachy
+///
+/// ```swift
+/// class ViewModel: ObservableObject {
+///     @Published var currentColor: Color = .red
+/// }
+///
+/// struct ColoredSphere: Model {
+///     @EnvironmentObject var model: ViewModel
+///
+///     var body: some Model {
+///         Sphere(radius: 1)
+///             .material(.color(model.currentColor))
+///     }
+/// }
+///
+/// struct MyModel: Model {
+///     @StateObject var model = ViewModel()
+///
+///     var body: some Model {
+///         ColoredSphere()
+///             .environmentObject(model)
+///     }
+/// }
+///
+/// ```
 @propertyWrapper public struct EnvironmentObject<ObjectType>
   where ObjectType: ObservableObject
 {

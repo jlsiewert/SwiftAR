@@ -24,6 +24,9 @@ class ARSCNViewObserver: NSObject, ARSCNViewDelegate {
     }
 }
 
+/**
+ A ``UIKit/UIViewController`` that renders a specific ``Experience``.
+ */
 public class SCNRenderedViewController<E: Experience>: UIViewController {
     enum State {
         case intitializing
@@ -76,6 +79,8 @@ public class SCNRenderedViewController<E: Experience>: UIViewController {
     
     var gestureRecognizerInstalled = false
     
+    /// Create a renderer for a specific ``Experience``
+    /// - Parameter experience: The experience to render.
     public init(experience: E) {
         self.experience = experience
         super.init(nibName: nil, bundle: nil)

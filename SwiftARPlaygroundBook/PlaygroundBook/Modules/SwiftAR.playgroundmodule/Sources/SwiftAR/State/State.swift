@@ -23,6 +23,14 @@ protocol WritableValueStorage: ValueStorage {
   var setter: ((Any) -> ())? { get set }
 }
 
+/**
+ Use `State` when you want to define a source of truth for a value.
+ 
+ The storage of the value is managed by the system.
+ Use the `$` shorthand to create a mutable ``Binding`` to that source of truth.
+ 
+ See ``Binding`` for details
+ */
 @propertyWrapper public struct State<Value> {
   private let initialValue: Value
 
@@ -31,15 +39,18 @@ protocol WritableValueStorage: ValueStorage {
   var getter: (() -> Any)?
   var setter: ((Any) -> ())?
 
+  /// Create a source of truth by wrapping an initial value
   public init(wrappedValue value: Value) {
     initialValue = value
   }
 
+  /// Read and write to the value managed by the system
   public var wrappedValue: Value {
     get { getter?() as? Value ?? initialValue }
     nonmutating set { setter?(newValue) }
   }
 
+  /// Create a `Binding` from the source of truth
   public var projectedValue: Binding<Value> {
     guard let getter = getter, let setter = setter else {
       fatalError("\(#function) not available outside of `body`")

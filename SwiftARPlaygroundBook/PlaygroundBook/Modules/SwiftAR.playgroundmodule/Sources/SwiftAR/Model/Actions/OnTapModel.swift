@@ -18,6 +18,10 @@ struct OnTapModel<Body: Model>: Model {
 }
 
 public extension Model {
+    
+    /// Registers an event handler that is executed every time the user taps on a rendered model
+    /// - Parameter handler: The event handler
+    /// - Returns:
     func onTap(perform handler: @escaping () -> ()) -> some Model {
         OnTapModel<Self>(body: self, handler: handler)
     }

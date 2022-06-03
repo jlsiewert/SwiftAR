@@ -9,6 +9,7 @@ import Foundation
 import SceneKit
 import simd
 
+/// Create a two-dimensional plane with a width and a height.
 public struct Plane {
     let width: CGFloat
     let height: CGFloat
@@ -16,6 +17,10 @@ public struct Plane {
     @Environment(\.material) var material: Material
     @Environment(\.reducedVertexCount) var reducedVertexCount: Bool
     
+    /// Creates a new plane from a width and a height
+    /// - Parameters:
+    ///   - width: The width of the plane
+    ///   - height: The height of the plane
     public init(width: Float = 0.1, height: Float = 0.1) {
         self.width = CGFloat(width)
         self.height = CGFloat(height)

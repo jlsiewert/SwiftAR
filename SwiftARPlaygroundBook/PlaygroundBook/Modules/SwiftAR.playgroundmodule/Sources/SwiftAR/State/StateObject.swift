@@ -14,17 +14,79 @@
 
 import Combine
 
+/**
+ A `StateObject` subscribes to a Combine `ObservableObject`
+ and rerenders a `Model` when the object publishes it's ``Combine/ObservableObject/objectWillChange`` publisher.
+ 
+ Use `StateObject` when you want `SwiftAR` to manage the lifecycle of the class instance.
+ Look at ``ObservedObject`` when you manage the lifecycle yourself or when the object
+ gets stored by `SwiftAR` from another `Model`.
+ 
+ ```swift
+ class CurrentPositionModel: ObservableObject {
+    @Published var position: simd_float3 = [0, 0, 0]
+ }
+ 
+ struct MyModel: Model {
+    // Make SwiftAR responsible for managing an instance of our model.
+    // A new CurrentPositionModel only gets created when a new MyModel is added
+    // to the render hierachy.
+    @StateObject var model = CurrentPositionModel()
+ 
+    var body: some Model {
+        Sphere()
+            .translate(model.position)
+    }
+ }
+ ```
+ 
+ */
 @propertyWrapper
 public struct StateObject<ObjectType: ObservableObject>: DynamicProperty {
+  /// Returns the stored value
   public var wrappedValue: ObjectType { (getter?() as? ObservedObject.Wrapper)?.root ?? initial() }
 
   let initial: () -> ObjectType
   var getter: (() -> Any)?
-
+    
+  /// Create a new `StateObject` by wrapping a `ObservableObject` instance
+  /// - Parameter initial: The instance that should be managed by `SwiftAR`.
+  ///
+  /// The `wrappedValue` will be stored the first time a `Model` is added to the
+  /// hierachy. On subsequent redraws, the stored object will be used.
   public init(wrappedValue initial: @autoclosure @escaping () -> ObjectType) {
     self.initial = initial
   }
 
+    /// Use the `projectedValue` with the `$` property wrapper shortcut to
+    /// create a ``Binding`` to a value stored in a `StateObject`.
+    ///
+    /// This ``Model`` creates a `Binding` from the ``ObservedObject`` to
+    /// be able to write to the stored property.
+    ///
+    /// ```swift
+    /// struct SphereModel: Model {
+    ///    @Binding var position: simd_float3
+    ///
+    ///    var body: some Model {
+    ///       Sphere()
+    ///          .translate(position)
+    ///          .onTap {
+    ///             // Move the sphere 1 meter in x direction
+    ///             position.x += 1
+    ///          }
+    ///    }
+    /// }
+    ///
+    /// struct MyModel: Model {
+    ///    @StateObject var model = CurrentPositionModel()
+    ///
+    ///    var body: some Model {
+    ///       // Use the $-prefix to create a Binding to a specific property.
+    ///       SphereModel(position: $model.position)
+    ///    }
+    /// }
+    /// ```
   public var projectedValue: ObservedObject<ObjectType>.Wrapper {
     getter?() as? ObservedObject.Wrapper ?? ObservedObject.Wrapper(root: initial())
   }

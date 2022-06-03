@@ -13,6 +13,7 @@ protocol SCNNodeRendererDelegate: AnyObject {
     var pointOfView: SCNNode? { get }
 }
 
+/// This class is a concrete `Renderer` implementation build on top of `SceneKit`.
 final class SCNNodeRenderer: Renderer {
     
     typealias TargetType = SCNNode
