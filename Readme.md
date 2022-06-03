@@ -1,6 +1,6 @@
 #  SwiftAR
 
-![SwiftAR Logo](doc/images/Header.png)
+![SwiftAR Logo](docs/images/Header.png)
 
 `SwiftAR` is a declerative framework to build AR experiences, with a `SwiftUI` inspired design.
 
