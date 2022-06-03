@@ -1,25 +1,20 @@
 /*:
- # Interactivity
+ # Hierachies
  
- `SwiftAR` allows you to build interactive
- experiences using the `@State`, `@Binding`, `@StateObject`
- `@ObservedObject` and `@EnvironmentObject` modifiers.
- 
- In this example, we use the `World` anchor type
- that just starts a world tracking.
- Objects can then be placed using the `transform`,
- `translate`, `rotate` and `scale` modifiers.
- 
- For interactivity, the `onTap` modifier on a `Model`
- triggers when the model is tapped on.
- 
- Similarly, the `onTap` modifier on the `World` anchor
- performs a raycast against the world.
+ `SwiftAR` supports building custom hiearchys of models.
  
  In this example, green spheres are placed whenever you
  tap on the screen.
  Tapping on a sphere (`RaycastResultVisualization`)
  toggles its color between `.green` and `.gray`.
+ 
+ This example builds on the previous page, but first defines
+ a custom `RaycastResultVisualization` model that is then
+ displayed on every position the user has tapped on.
+ This is done using a `ForEach` block.
+ 
+ Because `ForEach` requires elements to conform to `Identifiable`
+ the raycast result is wrapped in a custom `RaycastResult` struct.
  
  */
 
@@ -82,4 +77,5 @@ struct PlaygroundExperience: Experience {
     }
 }
 
-PlaygroundExperience.liveView()
+import PlaygroundSupport
+PlaygroundPage.current.liveView = SCNRenderedViewController(experience: PlaygroundExperience())

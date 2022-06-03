@@ -49,4 +49,5 @@ struct PlaygroundExperience: Experience {
     }
 }
 
-PlaygroundExperience.liveView()
+import PlaygroundSupport
+PlaygroundPage.current.liveView = SCNRenderedViewController(experience: PlaygroundExperience())

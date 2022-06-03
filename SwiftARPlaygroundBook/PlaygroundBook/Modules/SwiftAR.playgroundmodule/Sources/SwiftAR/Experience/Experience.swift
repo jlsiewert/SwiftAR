@@ -32,6 +32,7 @@ public protocol Experience {
 }
 
 #if swift(>=5.4)
+#warning("Building without PlaygroundSupport integration")
 #elseif canImport(PlaygroundSupport)
 import PlaygroundSupport
 

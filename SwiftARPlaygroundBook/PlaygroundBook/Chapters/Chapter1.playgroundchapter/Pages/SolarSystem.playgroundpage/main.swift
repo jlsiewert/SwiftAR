@@ -178,6 +178,7 @@ struct SolarSystemExperience: Experience {
     }
 }
 
-SolarSystemExperience.liveView()
+import PlaygroundSupport
+PlaygroundPage.current.liveView = SCNRenderedViewController(experience: SolarSystemExperience())
 
 
